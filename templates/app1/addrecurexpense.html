@@ -26,7 +26,7 @@
         </div>
         <div class="card radius-15" style="background-color: #243e54;">
             <div class="card-body">
-                <form action="{% url 'createrecurexpense' %}" method="post" enctype="multipart/form-data" autocomplete="off">
+                <form action="{% url 'createrecurringbill' %}" method="post" enctype="multipart/form-data" autocomplete="off">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-3 mt-2">

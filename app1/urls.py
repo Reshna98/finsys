@@ -1088,6 +1088,21 @@ urlpatterns = [
     # #recurringbills_reshna
     path('recurringbill_home',views.recurringbill_home,name='recurringbill_home'),
     path('addrecurringbill',views.addrecurringbill,name='addrecurringbill'),
-     
-     
+    path('createrecurringbill',views.createrecurringbill,name='createrecurringbill'),
+    path('createcustomer_rbill',views.createcustomer_rbill,name='createcustomer_rbill'),
+    path('createvendor_rbill',views.createvendor_rbill,name='createvendor_rbill'),
+    path('createitem_rbill',views.createitem_rbill,name='createitem_rbill'),
+    path('createunit_rbill',views.createunit_rbill,name='createunit_rbill'),
+    path('paymentterm_rbill',views.paymentterm_rbill,name='paymentterm_rbill'),
+    path('repeatevery',views.repeatevery,name='repeatevery'),
+    path('vendor_dropdown_rbill',views.vendor_dropdown_rbill,name='vendor_dropdown_rbill'),
+    path('credit_period_rbill',views.credit_period_rbill,name='credit_period_rbill'),
+   
+    # path('',views.,name=''),
+    # path('',views.,name=''),
+    # path('',views.,name=''),
+    # path('',views.,name=''),
+    # path('',views.,name=''),
+    # path('',views.,name=''),
+    # path('',views.,name=''),
 ]

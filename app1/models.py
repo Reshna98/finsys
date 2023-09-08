@@ -2096,3 +2096,58 @@ class EmployeeLoan(models.Model):
       File = models.FileField(upload_to='loanfile',default="",blank=True, null=True)
       company = models.ForeignKey(company, on_delete=models.CASCADE)
       status = models.CharField(max_length=20,null=True)
+
+########################recurring bill-reshna#############
+
+class recurring_bill(models.Model):
+    cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
+    rbillid = models.AutoField(('rid'), primary_key=True)
+    bill_no = models.IntegerField(default=1000)
+    profile_name = models.CharField(max_length=100,null=True,blank=True)
+    source_supply = models.CharField(max_length=100,null=True,blank=True)
+    vendor_name = models.CharField(max_length=100,null=True,blank=True)###vendor table
+    customer_name = models.CharField(max_length=100,null=True,blank=True)###customer table
+    repeat_every = models.CharField(max_length=100,null=True,blank=True)#####newtab
+    payment_method= models.CharField(max_length=100,null=True,blank=True)###use banktable
+    start_date=models.DateField(null=True,blank=True)##use this as date
+    end_date=models.DateField(null=True,blank=True)
+    payment_terms = models.CharField(max_length=100,null=True,blank=True)###newtab
+    sub_total = models.FloatField(null=True,blank=True)
+    igst = models.FloatField(null=True,blank=True)
+    cgst = models.FloatField(null=True,blank=True)
+    sgst = models.FloatField(null=True,blank=True)
+    tax_amount =  models.FloatField(null=True,blank=True)
+    shipping_charge = models.FloatField(null=True,blank=True)
+    adjustment = models.FloatField(null=True,blank=True)
+    grand_total = models.FloatField(null=True,blank=True)
+    note = models.CharField(max_length=255,null=True)
+    paid_amount= models.FloatField(max_length=100,null=True)
+    balance = models.FloatField(max_length=100,null=True)
+    file = models.FileField(upload_to='purchase/rbill',default="default.png")
+
+    bill_status = (
+        ('Draft','Draft'),
+        ('Billed','Billed'),
+    )
+    status =models.CharField(max_length=150,choices=bill_status,default='Draft')
+
+class recurringbill_item(models.Model):
+    bill = models.ForeignKey(recurring_bill, on_delete=models.CASCADE,null=True)
+    cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
+    items = models.CharField(max_length=100,null=True)
+    hsn = models.CharField(max_length=100,null=True)
+    quantity = models.IntegerField(null=True)
+    rate = models.CharField(max_length=100,null=True)
+    tax = models.CharField(max_length=100,null=True)
+    amount = models.CharField(max_length=100,null=True)
+
+class payment_terms(models.Model):
+    cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
+    Terms=models.CharField(max_length=100,null=True,blank=True)
+    Days=models.IntegerField(null=True,blank=True)  
+
+class repeatevery(models.Model):
+    cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
+    repeat=models.CharField(max_length=100,null=True,blank=True)  
+
+
