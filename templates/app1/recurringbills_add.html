@@ -44,7 +44,7 @@
                                     <select name="vendor_name" id="vendor" class="custom-select">
                                         <option selected disabled>Select Vendor</option>
                                         {% for v in vndr %}
-                                        <option value="{{ v.firstname }} {{ v.lastname }}">{{ v.firstname }} {{ v.lastname }}</option>
+                                        <option value="{{v.vendorid}} {{ v.firstname }} {{ v.lastname }}">{{ v.title }} {{ v.firstname }} {{ v.lastname }}</option>
                                         {% endfor %}
                                     </select>
                                     <a>
@@ -55,7 +55,125 @@
                                 </div>
                             </div>
                         </div>
-       
+                       
+                        <div class="row d-none" id="email_row">
+                            <div class="col-md-3 mt-2">
+                              <label for="email_inp">Vendor Email</label>
+                              <input type="text" class="form-control" id="email_inp" name="email_inp">
+                            </div>
+                          </div>
+                    
+                          <div class="row d-none" id="gst_trt_row">
+                            <div class="col-md-3  mt-2">
+                              <label for="gst_trt_inp">GST Treatment</label>
+                              <input type="text" class="form-control" id="gst_trt_inp" name="gst_trt_inp">
+                            </div>
+                          </div>
+                    
+                          <div class="row d-none" id="gstin_row">
+                            <div class="col-md-3  mt-2">
+                            <label for="gstin_inp">GST Number</label>
+                             <input type="text" class="form-control"  id="gstin_inp" name="gstin_inp">
+                            </div>
+                          </div>
+                          <hr>
+                          <br><br>
+                          <div class="row">
+                              <div class="col-md-3 mt-2"><h5>Bill Details</h5></div>
+                              <div class="col-md-3 mt-2"></div>
+                              <!-- <div class="col-md-3 mt-2">
+                                  <label>Bill Number</label>
+                                  <div class="d-flex">
+                                      <input name="" type="number" class="form-control" placeholder="1000">
+                                      <a class="form-control" data-target="#porderno" data-toggle="modal" style="width: 60px; cursor: pointer;"><center><i class="fa fa-gear"></i></center></i></a>
+                                  </div>
+                              </div> -->
+                          </div>
+                          <hr>
+                          <div class="row">
+                              <div class="col-md-3 mt-2">
+                                  <label for="">Source of Supply</label>
+                                  <select name="sourceofsupply" id="plosu" class="form-control" onchange="state(this)">
+                                      <option value="{{ cmp1.state }}" selected>{{ cmp1.state }}</option>
+                                      <option value="[AN] Andaman and Nicobar Islads">[AN] Andaman and Nicobar Islads</option>
+                                      <option value="[AD] Andhra Predhesh">[AD] Andhra Predhesh</option>
+                                      <option value="[AR] Arunachal Predesh">[AR] Arunachal Predesh</option>
+                                      <option value="[AS] Assam">[AS] Assam</option>
+                                      <option value="[BR] Bihar">[BR] Bihar</option>
+                                      <option value="[CH] Chandigarh">[CH] Chandigarh</option> Haveli</option>
+                                      <option value="[DD] Damn anad Diu">[DD] Damn anad Diu</option>
+                                      <option value="[DL] Delhi">[DL] Delhi</option>
+                                      <option value="[GA] Goa">[GA] Goa</option>
+                                      <option value="[GJ] Gujarat">[GJ] Gujarat</option>
+                                      <option value="[HR] Haryana">[HR] Haryana</option>
+                                      <option value="[HP] Himachal Predesh">[HP] Himachal Predesh</option>
+                                      <option value="[JK] Jammu and Kashmir">[JK] Jammu and Kashmir</option>
+                                      <option value="[JH] Jharkhand">[JH] Jharkhand</option>
+                                      <option value="[KA] Karnataka">[KA] Karnataka</option>
+                                      <option value="Kerala">[KL] Kerala</option>
+                                      <option value="[CG] Chhattisgarh">[CG] Chhattisgarh</option>
+                                      <option value="[DNH] Dadra and Nagar Haveli">[DNH] Dadra and Nagar
+                                      <option value="[LA] Ladakh">[LA] Ladakh</option>
+                                      <option value="[LD] Lakshadweep">[LD] Lakshadweep</option>
+                                      <option value="[MP] Madhya Predesh">[MP] Madhya Predesh</option>
+                                      <option value="[MH] Maharashtra">[MH] Maharashtra</option>
+                                      <option value="[MN] Manipur">[MN] Manipur</option>
+                                      <option value="[ML] Meghalaya">[ML] Meghalaya</option>
+                                      <option value="[MZ] Mizoram">[MZ] Mizoram</option>
+                                      <option value="[NL] Nagaland">[NL] Nagaland</option>
+                                      <option value="[OD] Odisha">[OD] Odisha</option>
+                                      <option value="[PY] Puducherry">[PY] Puducherry</option>
+                                      <option value="[PB] Punjab">[PB] Punjab</option>
+                                      <option value="[RJ] Rajasthan">[RJ] Rajasthan</option>
+                                      <option value="[SK] Sikkim">[SK] Sikkim</option>
+                                      <option value="[TN] Tamil Nadu">[TN] Tamil Nadu</option>
+                                      <option value="[TS] Telangana">[TS] Telangana</option>
+                                      <option value="[TR] Tripura">[TR] Tripura</option>
+                                      <option value="[UP] Uttar Predesh">[UP] Uttar Predesh</option>
+                                      <option value="[UK] Uttarakhand">[UK] Uttarakhand</option>
+                                      <option value="[WB] West Bengal">[WB] West Bengal</option>
+                                      <option value="[OT] Other Territory">[OT] Other Territory</option>
+                                  </select>
+                              </div>
+      
+                              <div class="col-md-3 mt-2">
+                                  <label for="">Bill No.</label>
+                                  <input type="text" class="form-control" id="" name="branch" placeholder="BL1000">
+                              </div>
+                              <div class="col-md-3 mt-2">
+                                  <label for="">Profile Name </label>
+                                  <input type="text" class="form-control" id="" name="profile_name" placeholder="">   
+                              </div>
+                              <div class="col-md-3 mt-2">
+                                
+                                <label for="">Repeat Every</label>
+                                <div class="d-flex">
+                                    <select class="form-control" name="repeat_every" id="repeat">
+                        
+                                        <option selected value="1 Week">Week</option>
+                                        <option value="2 Weeks">2 Weeks</option>
+                                        <option value="1 Month">Month</option>
+                                        <option value="2 Months">2 Months</option>
+                                        <option value="3 Months">3 Months</option>
+                                        <option value="6 Months">6 Months</option>
+                                        <option value="1 Year">Years</option>
+                                        <option value="2 Years">2 Years</option>
+                                        <option value="3 Years">3 Years</option>
+                                        <option value="6 Years">6 Years</option>
+                                        {% for r in re %}
+                                            <option value="{{ r.repeat}}">{{ r.repeat}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <a>
+                                        <button type="button" class="btn btn-outline-secondary ml-1" 
+                                        data-target="#newrepeat" data-toggle="modal">+</button>
+                                    </a>
+                              
+                                </div>
+                            </div>
+                        </div>
+                          <hr>
+                          
                         <div class="notices mt-3">
                             <div class="text-muted">NOTICE:</div>
                             <div class="text-muted">
@@ -652,7 +770,7 @@
                         <div class="col-md-3 mt-2">
                             <label for="">Payment Terms</label>
                             <div class="d-flex">
-                             <select class="form-control" name="paymentterms">
+                             <select class="form-control" name="paymentterms" id="paymentterms">
                                  <option selected id="trmopt"></option>
                                  <option value="0">Due on Receipt</option>
                                  <option value="15">NET 15</option>
@@ -899,7 +1017,7 @@
             </div>
             <div class="modal-body">
                 <div class="card p-3 m-3">
-                    <form action="{% url 'credit_period2' %}" method="post" autocomplete="off">
+                    <form action="{% url 'credit_period_rbill' %}" method="post" autocomplete="off">
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-md-2 mt-2"></div>
@@ -916,15 +1034,43 @@
         </div>   
     </div>
 </div> 
+<div class="modal fade" id="newrepeat">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #213b52;">
+            <div class="modal-header">
+                <h5 class="m-3">New Repeat Every</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card p-3 m-3">
+                    <form action="{% url 'create_repeatevery' %}" method="post" autocomplete="off" id="modalrepeat">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-2 mt-2"></div>
+                            <div class="col-md-5 mt-2">
+                                <input type="text" name="repeats" class="form-control" id="repeat_input">
+                            </div>
+                            <div class="col-md-2 mt-2">
+                                <button class="btn btn-outline-info text-grey mb-3" type="submit" id="repeatsave">Save</button>
+                            </div>
+                        </div>
+                    </form>  
+                </div>
+            </div>
+        </div>   
+    </div>
+</div> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-    var enteredVName = "";
+    // var enteredVName = "";
     $(document).on("click","#vendorSave",function(){
-    var firstNameValue = $("#fname").val();
-    var lastNameValue = $("#lname").val();
+    // var firstNameValue = $("#fname").val();
+    // var lastNameValue = $("#lname").val();
     
-    enteredVName = firstNameValue + " " + lastNameValue;
+    // enteredVName = firstNameValue + " " + lastNameValue;
         $.ajax({
     
     
@@ -972,6 +1118,30 @@
         
     });
 
+// function reloadVendor() {
+
+// $.ajax({
+//     url: "{% url 'vendor_dropdown_rbill' %}",
+//     type: "GET",
+//     dataType: "json",
+//     data: $(this).serialize(),
+//     csrfmiddlewaretoken: '{{ csrf_token }}',
+
+//     success: function(data) {
+//         var dropdown = $('#vendor');
+//         dropdown.empty();
+//     dropdown.append(`<option selected>Select Vendor</option>`);
+//         $.each(data, function(key, value) {
+//             console.log(value)
+//             dropdown.append($('<option></option>').attr('value', key).text(value[1] + " " +value[2] + " "+ value[3]).val(value[0] + " " +value[2] + " "+ value[3]));
+//         });
+//     },
+//     error: function(xhr, status, error) {
+//     console.error(xhr.responseText);
+//     }
+// });
+// }
+
 function reloadVendor() {
 
     $.ajax({
@@ -984,17 +1154,25 @@ function reloadVendor() {
         success: function(data) {
             var dropdown = $('#vendor');
             dropdown.empty();
+            dropdown.append(`<option selected>Select Vendor</option>`);
             $.each(data, function(key, value) {
                 
-                dropdown.append($('<option></option>').attr('value', key).text(value).val(value));
+                // dropdown.append($('<option></option>').attr('value', key).text(value).val(value));
+                dropdown.append($('<option></option>').attr('value', key).text(value[1] + " " +value[2] + " "+ value[3]).val(value[0] + " " +value[2] + " "+ value[3]));
                 
             });
-            if (enteredVName) {
-            dropdown.find('option').filter(function() {
-            return $(this).text() === enteredVName;
-        }).prop('selected', true);
+    //         if (enteredVName) {
+    //         dropdown.find('option').filter(function() {
+    //         return $(this).text() === enteredVName;
+    //     }).prop('selected', true);
         
-      }
+    //   }
+//     if (enteredVName) {
+//     dropdown.find('option:contains("' + enteredVName + '")').prop('selected', true);
+//     // Trigger the change event to load the selected vendor's details
+//     dropdown.trigger('change');
+// }
+
     
         },
         error: function(xhr, status, error) {
@@ -1003,8 +1181,108 @@ function reloadVendor() {
     });
 
 }
+$(document).ready(function() {
+    $('#vendor').change(function() {
+        // var selectedValue = $("#vendor").val();
+        // // var values = selectedValue.split(' '); // Split by space
+        // var vendorid = values[0];
+        // // The rest of the values will be the name (firstname and lastname)
+        // var name = values.slice(1).join(' ');
+
+        // Send the vendorid to the server
+        $.ajax({
+            url: "{% url 'get_vendordet' %}", 
+            data: { 
+                // id: vendorid,  // Pass the vendorid to the server
+                // csrfmiddlewaretoken: '{{ csrf_token }}' 
+                id: $('#vendor').val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            type : 'POST',
+            success: function(data) {
+                // Update your UI with the data
+                $("#email_row").removeClass('d-none');
+                $("#email_row").addClass('d-flex');
+                $("#gstin_row").removeClass('d-none');
+                $("#gstin_row").addClass('d-flex');
+                $("#gst_trt_row").removeClass('d-none');
+                $("#gst_trt_row").addClass('d-flex');
+                $('#email_inp').val(" " + data.email);
+                $('#gstin_inp').val(" " + data.gstin);
+                $('#gst_trt_inp').val(" " + data.gsttype);
+            }
+        });
+    });
+});
 </script>
     <script>
+    
+    $(document).on("click","#repeatsave",function(){
+
+        $.ajax({
+    
+    
+            type : 'POST',
+            url:"{% url 'create_repeatevery' %}",
+        
+            data:{
+                
+                repeats : $("#repeat_input").val(),
+             
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+                
+            },
+            
+            success: function(response) {
+                document.getElementById("modalrepeat").reset();
+                reloadrepeat();
+            },
+                    
+        });
+    
+        
+        
+    });
+
+
+
+function reloadrepeat() {
+
+    $.ajax({
+        url: "{% url 'repeat_dropdown_rbill' %}",
+        type: "GET",
+        dataType: "json",
+        data: $(this).serialize(),
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+
+        success: function(data) {
+            var dropdown = $('#repeat');
+            dropdown.empty()
+            dropdown.append(`<option selected value="1 Week">Week</option>
+                                        <option value="2 Weeks">2 Weeks</option>
+                                        <option value="1 Month">Month</option>
+                                        <option value="2 Months">2 Months</option>
+                                        <option value="3 Months">3 Months</option>
+                                        <option value="6 Months">6 Months</option>
+                                        <option value="1 Year">Years</option>
+                                        <option value="2 Years">2 Years</option>
+                                        <option value="3 Years">3 Years</option>
+                                        <option value="6 Years">6 Years</option>`);
+            $.each(data, function(key, value) {
+            dropdown.append($('<option></option>').attr('value', key).text(value).val(value));
+            
+                
+            });
+ 
+
+    
+        },
+        error: function(xhr, status, error) {
+        console.error(xhr.responseText);
+        }
+    });
+
+}
         $('#date').val(new Date().toJSON().slice(0,10));
         $('#date1').val(new Date().toJSON().slice(0,10));
         $('#date2').val(new Date().toJSON().slice(0,10));

@@ -42350,6 +42350,7 @@ def addrecurringbill(request):
         cust = customer.objects.filter(cid=cmp1)
         cpd = creditperiod.objects.filter(cid=cmp1)
         # bank=BankAccount.objects.filter(holder=cmp1)
+        re = repeatevery.objects.filter(cid=cmp1)
         context = {
                     'cmp1': cmp1,
                     'vndr':vndr,
@@ -42357,9 +42358,10 @@ def addrecurringbill(request):
                     'unit':unit,
                     'cust':cust,  
                     'cpd':cpd,
+                    're':re,
                     # 'bank':bank
                 }
-        return render(request,'app1/recurringbills_add',context)
+        return render(request,'app1/recurringbills_add.html',context)
     return redirect('addrecurringbill')
 
 def createrecurringbill(request):
@@ -42372,7 +42374,8 @@ def createrecurringbill(request):
         if request.method == 'POST':
             vname = request.POST['vendor_name']
             cname=request.POST['customer_name']
-            bill_no= '1000'
+            # bill_no= '1000'
+            billno = request.POST['billno']
             profile_name=request.POST['profile_name']
             payment_method=request.POST['payment_method']
             sourceofsupply=request.POST['sourceofsupply']
@@ -42396,14 +42399,14 @@ def createrecurringbill(request):
                                     sourceofsupply=sourceofsupply,sub_total=sub_total,sgst=sgst,adjustment=adjustment,balance=balance,note= note,
                                     shipping_charge=shipping_charge,
                                     cgst=cgst,igst=igst,tax_amount=tax_amount,
-                                    grand_total=grand_total,cid=cmp1)
+                                    grand_total=grand_total,cid=cmp1,billno=billno)
 
             if len(request.FILES) != 0:
                 bill.file=request.FILES['file'] 
 
             bill.save()
-            bill.bill_no = int(bill.bill_no) + bill.billid
-            bill.save()
+            # bill.bill_no = int(bill.bill_no) + bill.billid
+            # bill.save()
 
             return redirect('addrecurringbill')
         return render(request,'app1/recurringbills_add.html',{'cmp1': cmp1})
@@ -42525,9 +42528,51 @@ def vendor_dropdown_rbill(request):
         options = {}
         option_objects = vendor.objects.filter(cid = comp)
         for option in option_objects:
-            options[option.vendorid] = option.firstname+ " " + option.lastname
+            # options[option.vendorid] = option.firstname+ " " + option.lastname
+            options[option.vendorid] = [option.vendorid , option.title, option.firstname, option.lastname]
 
         return JsonResponse(options)
+
+
+
+
+@login_required(login_url='regcomp')
+def get_vendordet(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        comp = company.objects.get(id=request.session["uid"])
+
+        vendor_id = request.POST.get('id').split(" ")[0]
+     
+        # Query the vendor using the correct vendor_id
+        vdr = vendor.objects.get(vendorid=vendor_id,cid = request.session['uid'])
+
+        email = vdr.email
+        gstin = vdr.gstin
+        gsttype = vdr.gsttype
+
+        return JsonResponse({'email' : email, 'gstin' : gstin, 'gsttype': gsttype}, safe=False)
+
+
+
+@login_required(login_url='regcomp')
+def credit_period_rbill(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        if request.method=='POST':
+            period = request.POST['newperiod']
+            cpd=creditperiod(newperiod = period)
+            cpd.save()
+            return redirect('addrecurringbill')
+        return render(request,'app1/recurringbills_add.html',{'cmp1':cmp1})
+    return redirect('/')
 
 def createitem_rbill(request):
     if 'uid' in request.session:
@@ -42613,7 +42658,7 @@ def paymentterm_rbill(request):
     return redirect('/')
 
 @login_required(login_url='regcomp')
-def repeatevery(request):
+def create_repeatevery(request):
     if 'uid' in request.session:
         if request.session.has_key('uid'):
             uid = request.session['uid']
@@ -42621,25 +42666,22 @@ def repeatevery(request):
             return redirect('/')
         cmp1 = company.objects.get(id=request.session['uid'])
         if request.method=='POST':
-            repeat= request.POST['repeat']
-            rt=repeatevery(repeat= repeat)
-            rt.save()
-            return redirect('addrecurringbill')
-        return render(request,'app1/recurringbills_add.html',{'cmp1':cmp1})
-    return redirect('/')
+            repeats= request.POST['repeats']
+            re=repeatevery(repeat=repeats,cid=cmp1)
+            re.save()
+            return HttpResponse({"message": "success"})
 
-@login_required(login_url='regcomp')
-def credit_period_rbill(request):
+def repeat_dropdown_rbill(request):
     if 'uid' in request.session:
         if request.session.has_key('uid'):
             uid = request.session['uid']
         else:
             return redirect('/')
-        cmp1 = company.objects.get(id=request.session['uid'])
-        if request.method=='POST':
-            period = request.POST['newperiod']
-            cpd=creditperiod(newperiod = period)
-            cpd.save()
-            return redirect('addrecurringbill')
-        return render(request,'app1/recurringbills_add.html',{'cmp1':cmp1})
-    return redirect('/')
+        comp = company.objects.get(id=request.session["uid"])
+        options = {}
+        option_objects = repeatevery.objects.filter(cid = comp)
+        for option in option_objects:
+           
+            options[option.id] = option.repeat
+
+        return JsonResponse(options)
