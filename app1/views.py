@@ -42372,31 +42372,32 @@ def createrecurringbill(request):
             return redirect('/')
         cmp1 = company.objects.get(id=request.session['uid'])
         if request.method == 'POST':
-            vname = request.POST['vendor_name']
-            cname=request.POST['customer_name']
+            vname = request.POST.get('vendor_name')
+            cname=request.POST.get('customer_name')
             # bill_no= '1000'
-            billno = request.POST['billno']
-            profile_name=request.POST['profile_name']
-            payment_method=request.POST['payment_method']
-            sourceofsupply=request.POST['sourceofsupply']
-            repeat_every=request.POST['repeat_every']
-            start_date=request.POST['start_date']
-            sub_total=request.POST['sub_total']
-            shipping_charge=request.POST['shipping_charge']
-            adjustment=request.POST['adjustment']
-            sgst=request.POST['sgst']
-            cgst=request.POST['cgst']
-            igst=request.POST['igst']
-            tax_amount=request.POST['tax_amount']
-            grand_total=request.POST['grand_total']
-            balance=request.POST['balance']
-            adjustment=request.POST['adjustment']
-            note=request.POST['note']
-            start_date=request.POST['start_date']
-            end_date=request.POST['end_date']
+            billno = request.POST.get('billno')
+            profile_name=request.POST.get('profile_name')
+            payment_method=request.POST.get('payment_method')
+            sourceofsupply=request.POST.get('sourceofsupply')
+            repeat_every=request.POST.get('repeat_every')
+            start_date=request.POST.get('start_date')
+            sub_total=request.POST.get('sub_total')
+            shipping_charge=request.POST.get('shipping_charge')
+            adjustment=request.POST.get('adjustment')
+            sgst=request.POST.get('sgst')
+            cgst=request.POST.get('cgst')
+            igst=request.POST.get('igst')
+            tax_amount=request.POST.get('tax_amount')
+            grand_total=request.POST.get('grand_total')
+            balance=request.POST.get('balance')
+            adjustment=request.POST.get('adjustment')
+            note=request.POST.get('note')
+            start_date=request.POST.get('start_date')
+            end_date=request.POST.get('end_date')
+            paid_amount=request.POST.get('paid_amount')
             bill = recurring_bill(vendor_name=vname,customer_name =cname,repeat_every=repeat_every,
                                     payment_method=payment_method,start_date=start_date,end_date=end_date, paid_amount= paid_amount,
-                                    sourceofsupply=sourceofsupply,sub_total=sub_total,sgst=sgst,adjustment=adjustment,balance=balance,note= note,
+                                    source_supply=sourceofsupply,sub_total=sub_total,sgst=sgst,adjustment=adjustment,balance=balance,note= note,
                                     shipping_charge=shipping_charge,
                                     cgst=cgst,igst=igst,tax_amount=tax_amount,
                                     grand_total=grand_total,cid=cmp1,billno=billno)
@@ -42408,7 +42409,7 @@ def createrecurringbill(request):
             # bill.bill_no = int(bill.bill_no) + bill.billid
             # bill.save()
 
-            return redirect('addrecurringbill')
+            return redirect('recurringbill_home')
         return render(request,'app1/recurringbills_add.html',{'cmp1': cmp1})
     return redirect('/')
 
@@ -42473,6 +42474,38 @@ def createcustomer_rbill(request):
         return render(request, 'app1/recurringbills_add.html', context)
     return redirect('/')
 
+def cust_dropdown_rbill(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        comp = company.objects.get(id=request.session["uid"])
+        options = {}
+        option_objects = customer.objects.filter(cid = comp)
+        for option in option_objects:
+            options[option.customerid] = [option.customerid , option.title, option.firstname, option.lastname]
+
+        return JsonResponse(options)
+
+@login_required(login_url='regcomp')
+def get_customerdet(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        comp = company.objects.get(id=request.session["uid"])
+
+        customer_id = request.POST.get('id').split(" ")[0]
+     
+        cust = customer.objects.get(customerid=customer_id,cid = request.session['uid'])
+
+        email = cust.email
+        gstin = cust.gstin
+        gsttype = cust.gsttype
+
+        return JsonResponse({'email' : email, 'gstin' : gstin, 'gsttype': gsttype}, safe=False)
 
 @login_required(login_url='regcomp')
 def createvendor_rbill(request):
@@ -42666,8 +42699,8 @@ def create_repeatevery(request):
             return redirect('/')
         cmp1 = company.objects.get(id=request.session['uid'])
         if request.method=='POST':
-            repeats= request.POST['repeats']
-            re=repeatevery(repeat=repeats,cid=cmp1)
+            repeate= request.POST['repeats']
+            re=repeatevery(repeat=repeate,cid=cmp1)
             re.save()
             return HttpResponse({"message": "success"})
 
