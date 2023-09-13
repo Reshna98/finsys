@@ -2111,7 +2111,7 @@ class recurring_bill(models.Model):
     repeat_every = models.CharField(max_length=100,null=True,blank=True)#####newtab
     payment_method= models.CharField(max_length=100,null=True,blank=True)###use banktable
     start_date=models.DateField(null=True,blank=True)##use this as date
-    end_date=models.DateField(null=True,blank=True)
+    end_date=models.CharField(max_length=100,null=True,blank=True)
     payment_terms = models.CharField(max_length=100,null=True,blank=True)###newtab
     sub_total = models.FloatField(null=True,blank=True)
     igst = models.FloatField(null=True,blank=True)
@@ -2142,13 +2142,7 @@ class recurringbill_item(models.Model):
     tax = models.CharField(max_length=100,null=True)
     amount = models.CharField(max_length=100,null=True)
 
-class payment_terms(models.Model):
-    cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
-    Terms=models.CharField(max_length=100,null=True,blank=True)
-    Days=models.IntegerField(null=True,blank=True)  
-
 class repeatevery(models.Model):
     cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
     repeat=models.CharField(max_length=100,null=True,blank=True)  
-
 
