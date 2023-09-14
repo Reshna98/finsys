@@ -1148,7 +1148,6 @@ class sales_item(models.Model):
     cid = models.ForeignKey(company, on_delete=models.CASCADE,default='')
     product = models.CharField(max_length=100,null=True)
     hsn = models.CharField(max_length=100,null=True)
-    # description = models.CharField(max_length=100, default='')
     qty = models.IntegerField(default=0, null=True)
     price = models.CharField(max_length=100,null=True)
     total = models.IntegerField(default=0, null=True)
@@ -2135,12 +2134,13 @@ class recurring_bill(models.Model):
 class recurringbill_item(models.Model):
     bill = models.ForeignKey(recurring_bill, on_delete=models.CASCADE,null=True)
     cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
-    items = models.CharField(max_length=100,null=True)
+    item = models.CharField(max_length=100,null=True)
     hsn = models.CharField(max_length=100,null=True)
-    quantity = models.IntegerField(null=True)
-    rate = models.CharField(max_length=100,null=True)
+    qty = models.IntegerField(default=0, null=True)
+    price = models.CharField(max_length=100,null=True)
+    total = models.IntegerField(default=0, null=True)
+    discount = models.CharField(max_length=100,null=True)
     tax = models.CharField(max_length=100,null=True)
-    amount = models.CharField(max_length=100,null=True)
 
 class repeatevery(models.Model):
     cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)

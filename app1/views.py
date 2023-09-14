@@ -42412,6 +42412,26 @@ def createrecurringbill(request):
             bill.save()
             # bill.bill_no = int(bill.bill_no) + bill.billid
             # bill.save()
+            item = request.POST.getlist("item[]")
+            hsn  = request.POST.getlist("hsn[]")
+            qty = request.POST.getlist("qty[]")
+            price = request.POST.getlist("price[]")
+            discount = request.POST.getlist("discount[]")
+            if request.POST.get('placosupply') == cmp1.state:
+                tax = request.POST.getlist("tax1[]")
+            else:
+                tax = request.POST.getlist("tax2[]")
+
+            total = request.POST.getlist("total[]")
+
+            billid=recurring_bill.objects.get(id =bill.id)
+
+            if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(discount)==len(total) and item and hsn and qty and price and tax and discount and total:
+                mapped=zip(item,hsn, qty,price,tax,discount, total)
+                mapped=list(mapped)
+            for ele in mapped:
+                billAdd = recurringbill_item.objects. create(item = ele[0],hsn=ele[1],
+                qty=ele[2],price=ele[3],tax=ele[4],discount = ele[5],total=ele[6],bill=billid, cid=cmp1 )
 
             return redirect('recurringbill_home')
         return render(request,'app1/recurringbills_add.html',{'cmp1': cmp1})
@@ -42611,21 +42631,8 @@ def credit_period_rbill(request):
         return render(request,'app1/recurringbills_add.html',{'cmp1':cmp1})
     return redirect('/')
 
-# @login_required(login_url='regcomp')
-# def credit_period_rbill2(request):
-#     if 'uid' in request.session:
-#         if request.session.has_key('uid'):
-#             uid = request.session['uid']
-#         else:
-#             return redirect('/')
-#         cmp1 = company.objects.get(id=request.session['uid'])
-#         if request.method=='POST':
-#             period = request.POST['newperiod']
-#             cpd=creditperiod(newperiod = period,cid=cmp1)
-#             cpd.save()
-#             return redirect('addrecurringbill')
-#         return render(request,'app1/recurringbills_add.html',{'cmp1':cmp1})
-#     return redirect('/')
+
+
 @login_required(login_url='regcomp')
 def credit_period_rbill2(request):
     if 'uid' in request.session:
@@ -42683,7 +42690,7 @@ def createitem_rbill(request):
             itax = request.POST['taxref']
             ipcost = request.POST['pcost']
             iscost = request.POST['salesprice']
-            itmdate = request.POST['itmdate']
+            # itmdate = request.POST['itmdate']
             #itrate = request.POST['tax']
             ipuracc = request.POST['pur_account']
             isalacc = request.POST['sale_account']
@@ -42698,7 +42705,7 @@ def createitem_rbill(request):
                                 hsn=ihsn,tax_reference=itax,
                                 purchase_cost=ipcost,
                                 sales_cost=iscost,
-                                itmdate=itmdate,
+                                # itmdate=itmdate,
                                 #tax_rate=itrate,
                                 acount_pur=ipuracc,
                                 account_sal=isalacc,
@@ -42712,10 +42719,47 @@ def createitem_rbill(request):
                                 status=istatus,
                                 cid=cmp1)
             item.save()
-            return redirect('addrecurringbill')
-        return render(request,'app1/recurringbills_add.html')
-    return redirect('/') 
+    #         return redirect('addrecurringbill')
+    #     return render(request,'app1/recurringbills_add.html')
+    # return redirect('/') 
+            return HttpResponse({"message": "success"})
 
+@login_required(login_url='regcomp')
+def item_dropdown_rbill(request):
+
+    company1 = company.objects.get(id=request.session["uid"])
+
+    options = {}
+    option_objects = itemtable.objects.filter(cid=request.session["uid"])
+    for option in option_objects:
+        options[option.id] = [option.name]
+
+    return JsonResponse(options)
+
+def itemdata_rbill(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        print(cmp1.state)
+        id = request.GET.get('id')
+        print(id)
+        toda = date.today()
+        tod = toda.strftime("%Y-%m-%d")
+        # to = toda.strftime("%d-%m-%Y")
+        item = itemtable.objects.get(name=id,cid=cmp1)
+        print(item)
+        hsn = item.hsn
+        # qty = item.stock
+        price = item.purchase_cost
+        gst = item.intra_st
+        sgst = item.inter_st
+        places=cmp1.state
+        return JsonResponse({"status":" not",'hsn':hsn,'places':places,'price':price,'gst':gst,'sgst':sgst})
+    return redirect('/')
+    
 @login_required(login_url='regcomp')
 def createunit_rbill(request):
     if 'uid' in request.session:
