@@ -1132,7 +1132,7 @@ $(document).ready(function(){
           <td class = 'nnum'>${roinc}</td>
                     <td style="width: 20%;">
                       <div class="d-flex">
-                      <select name='product[]' id="product${roinc}" class="form-control product" style="background-color: #2f516f; color: white;">
+                      <select name='product[]' id="product${roinc}" class="form-control product" style="background-color: #2f516f; color: white;"  onchange = "showRate(this.id,this.value);">
                         <option value=" " selected>Select Product</option>
                         
                         {% for i in item %}

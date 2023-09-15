@@ -42353,6 +42353,8 @@ def addrecurringbill(request):
         bank=bankings_G.objects.filter(cid=cmp1)
         acc2 = accounts1.objects.filter(cid=cmp1,acctype='Sales')
         acc1 = accounts1.objects.filter(cid=cmp1,acctype='Cost of Goods Sold')
+        toda = date.today()
+        tod = toda.strftime("%Y-%m-%d")
         context = {
                     'cmp1': cmp1,
                     'vndr':vndr,
@@ -42363,7 +42365,8 @@ def addrecurringbill(request):
                     're':re,
                     'bank':bank,
                     'acc2':acc2,
-                    'acc1':acc1
+                    'acc1':acc1,
+                    'tod':tod
         }
         return render(request,'app1/recurringbills_add.html',context)
     return redirect('addrecurringbill')
@@ -42382,7 +42385,7 @@ def createrecurringbill(request):
             billno = request.POST.get('billno')
             profile_name=request.POST.get('profile_name')
             payment_method=request.POST.get('payment_method')
-            sourceofsupply=request.POST.get('sourceofsupply')
+            sourceofsupply=request.POST.get('sourceof_supply')
             repeat_every=request.POST.get('repeat_every')
             start_date=request.POST.get('start_date')
             sub_total=request.POST.get('sub_total')
@@ -42417,21 +42420,24 @@ def createrecurringbill(request):
             qty = request.POST.getlist("qty[]")
             price = request.POST.getlist("price[]")
             discount = request.POST.getlist("discount[]")
-            if request.POST.get('placosupply') == cmp1.state:
+            if request.POST.get('sourceof_supply') == cmp1.state:
+                print("Place of supply matches cmp1.state")
+                print("sourceof_supply:", request.POST.get('sourceof_supply'))
                 tax = request.POST.getlist("tax1[]")
             else:
                 tax = request.POST.getlist("tax2[]")
 
+
             total = request.POST.getlist("total[]")
 
-            billid=recurring_bill.objects.get(id =bill.id)
+            billid=recurring_bill.objects.get(rbillid = bill.rbillid)
 
             if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(discount)==len(total) and item and hsn and qty and price and tax and discount and total:
                 mapped=zip(item,hsn, qty,price,tax,discount, total)
                 mapped=list(mapped)
-            for ele in mapped:
-                billAdd = recurringbill_item.objects. create(item = ele[0],hsn=ele[1],
-                qty=ele[2],price=ele[3],tax=ele[4],discount = ele[5],total=ele[6],bill=billid, cid=cmp1 )
+                for ele in mapped:
+                    billAdd = recurringbill_item.objects.create(item = ele[0],hsn=ele[1],
+                    qty=ele[2],price=ele[3],tax=ele[4],discount = ele[5],total=ele[6],bill=billid, cid=cmp1 )
 
             return redirect('recurringbill_home')
         return render(request,'app1/recurringbills_add.html',{'cmp1': cmp1})
