@@ -42333,8 +42333,48 @@ def deleteloan(request,eid):
 @login_required(login_url='regcomp')
 def recurringbill_home(request):
     cmp1 = company.objects.get(id=request.session["uid"])
-    context={'cmp1': cmp1}
+    rbill= recurring_bill.objects.filter(cid=cmp1)
+    context={'cmp1': cmp1,
+            'rbill':rbill
+            }
     return render(request,"app1/recurringbills_home.html",context)
+
+@login_required(login_url='regcomp')
+def draft_rbill(request):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    rbill = recurring_bill.objects.filter(status='Draft',cid=cmp1).all()
+    return render(request,'app1/recurringbills_home.html',{'cmp1':cmp1,'rbill':rbill})
+
+@login_required(login_url='regcomp')
+def billed_rbill(request):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    rbill = recurring_bill.objects.filter(status='Billed',cid=cmp1).all()
+    return render(request,'app1/recurringbills_home.html',{'cmp1':cmp1,'rbill':rbill})
+
+@login_required(login_url='regcomp')
+def rbillconvert(request,id):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        rbill = recurring_bill.objects.get(rbillid=id)
+        rbill.status = 'Billed'
+        rbill.save()
+        return redirect(view_rbill,id)
+    return redirect('/')
+    
+@login_required(login_url='regcomp')
+def view_rbill(request, id):
+    try:
+        cmp1 = company.objects.get(id=request.session["uid"])
+        rbill= recurring_bill.objects.get(rbillid=id, cid=cmp1)
+        ritem = recurringbill_item.objects.all().filter(bill=id)
+        context = {'rbill': rbill, 'cmp1': cmp1,'ritem':ritem}
+        return render(request, 'app1/recurringbill_view.html', context)
+    except:
+        return redirect('view_rbill')
 
 @login_required(login_url='regcomp')
 def addrecurringbill(request):
@@ -42379,12 +42419,15 @@ def createrecurringbill(request):
             return redirect('/')
         cmp1 = company.objects.get(id=request.session['uid'])
         if request.method == 'POST':
-            vname = request.POST.get('vendor_name')
-            cname=request.POST.get('customer_name')
+            vname = request.POST.get('vendor_name').split(" ")[1:]
+            vname = " ".join(vname)
+            cname=request.POST.get('customer_name').split(" ")[1:]
+            cname = " ".join(cname)
             # bill_no= '1000'
             billno = request.POST.get('billno')
             profile_name=request.POST.get('profile_name')
             payment_method=request.POST.get('payment_method')
+            payment_terms=request.POST.get('payment_terms')
             sourceofsupply=request.POST.get('sourceof_supply')
             repeat_every=request.POST.get('repeat_every')
             start_date=request.POST.get('start_date')
@@ -42396,22 +42439,25 @@ def createrecurringbill(request):
             igst=request.POST.get('igst')
             tax_amount=request.POST.get('tax_amount')
             grand_total=request.POST.get('grand_total')
-            balance=request.POST.get('balance')
+            # balance=request.POST.get('balance')
             adjustment=request.POST.get('adjustment')
             note=request.POST.get('note')
             start_date=request.POST.get('start_date')
             end_date=request.POST.get('end_date')
             paid_amount=request.POST.get('paid_amount')
-            bill = recurring_bill(vendor_name=vname,customer_name =cname,repeat_every=repeat_every,
+            paid_amount = float(paid_amount)
+            grand_total = float(grand_total)
+            # balance = float(grand_total - paid_amount)
+            balance = round(float(grand_total - paid_amount), 3)
+            bill = recurring_bill(vendor_name=vname,customer_name =cname,repeat_every=repeat_every,profile_name=profile_name,
                                     payment_method=payment_method,start_date=start_date,end_date=end_date, paid_amount= paid_amount,
                                     source_supply=sourceofsupply,sub_total=sub_total,sgst=sgst,adjustment=adjustment,balance=balance,note= note,
-                                    shipping_charge=shipping_charge,
+                                    shipping_charge=shipping_charge, payment_terms= payment_terms,
                                     cgst=cgst,igst=igst,tax_amount=tax_amount,
                                     grand_total=grand_total,cid=cmp1,billno=billno)
 
             if len(request.FILES) != 0:
                 bill.file=request.FILES['file'] 
-
             bill.save()
             # bill.bill_no = int(bill.bill_no) + bill.billid
             # bill.save()

@@ -375,18 +375,25 @@
                                 </div><br>
                                 <div>
                                     <input type="file" class="form-control" name="file">
+                                </div><br>
+                                <div class="row container-fluid p-2 m-0" style="background-color:rgba(0,0,0,.4); border: 1px solid rgba(128, 128, 128, 0.6);">
+                                <div class="col-md-4 mt-2 align-items-center">
+                                    <label for="">Paid Amount</label>
+                                    <input type="number" class="form-control" value=0  step=0 min=0 id="paid_amount" name="paid_amount">
+                                </div>
                                 </div>
                                 <div>
                                 </div>
                             </div>
-                           
+                            <div class="row clearfix" style="margin-top:20px">
+                            </div>
                             <div class="col-md-1"></div>
                               <div class="col-md-5 table-responsive-md mt-3" id="tab_logic_total" style="background-color:rgba(0,0,0,.4); border: 1px solid rgba(128, 128, 128, 0.6);">
                                   <div class="p-3">
                                       <div class="row container-fluid p-2 m-0">
                                           <div class="col-sm-4 mt-2"><label class="text-center">Sub Total</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" step="any" name='subtotal' placeholder=0 
+                                          <div class="col-sm-7 mt-2"><input type="number" step="any" name='sub_total' placeholder=0 
                                               class="form-control" id="sub_total">
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -418,7 +425,7 @@
                                       <div class="row container-fluid p-2 m-0">
                                           <div class="col-sm-4 mt-2"><label for="a" class="text-center">Tax Amount</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" step="any" name='taxamount' id="tax_amount" placeholder='0.00' 
+                                          <div class="col-sm-7 mt-2"><input type="number" step="any" name='tax_amount' id="tax_amount" placeholder='0.00' 
                                               class="form-control"/>
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -436,7 +443,7 @@
                                       <div class="row container-fluid p-2 m-0">
                                           <div class="col-sm-4 mt-2"><label for="a" class="text-center">Adjustment</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" step="any" name='adjustment' id="adj" placeholder='0.00' 
+                                          <div class="col-sm-7 mt-2"><input type="number" value=0  step=0 min=0 name='adjustment' id="adj" placeholder='0.00' 
                                               class="form-control"/>
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -444,7 +451,7 @@
                                       <div class="row container-fluid p-2 m-0">
                                           <div class="col-sm-4 mt-2"><label for="a" class="text-center">Grand Total</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" name='grandtotal' id="grandtotal" placeholder='0.00' readonly
+                                          <div class="col-sm-7 mt-2"><input type="number" name='grand_total' id="grandtotal" placeholder='0.00' readonly
                                               class="form-control"/>
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -2664,10 +2671,18 @@ $(document).ready(function(){
             $('#baldue').val((parseFloat(subtot)+parseFloat(tax)+parseFloat(sh)).toFixed(2));
         });
 
-        $(document).on("change", "#adj", function(){
-            var round = parseFloat($("#grandtotal").val()) + parseFloat($("#adj").val()) 
-            $("#grandtotal").val(round);
-            $('#baldue').val(round);
+        // $(document).on("change", "#adj", function(){
+        //     var round = parseFloat($("#grandtotal").val()) + parseFloat($("#adj").val()) 
+        //     $("#grandtotal").val(round);
+        //     $('#baldue').val(round);
+        // });
+        $(document).on('keyup',"#adj",function(){
+            var subtot = $('#sub_total').val();
+            var tax = $('#tax_amount').val();
+            var sh = $("#ship").val();
+            var ad=$("#adj").val();
+            $('#grandtotal').val((parseFloat(subtot)+parseFloat(tax)+parseFloat(sh)+parseFloat(ad)).toFixed(2));
+            $('#baldue').val((parseFloat(subtot)+parseFloat(tax)+parseFloat(sh)+parseFloat(ad)).toFixed(2));
         });
 
         $(document).on("click",".seltax",function(){
@@ -2697,14 +2712,14 @@ $(document).ready(function(){
                 }
 
             });
-            $(document).on('change','#plosu',function()   {
+            $(document).on('change','#plosur',function()   {
                 $(".seltax").removeClass('d-none');
                 $(".seltax").addClass('d-flex');
                 $(".intra_tax").removeClass('d-flex');
                 $(".intra_tax").addClass('d-none');
                 $(".inter_tax").removeClass('d-flex');
                 $(".inter_tax").addClass('d-none');
-                var bc = document.getElementById("plosu").value;
+                var bc = document.getElementById("plosur").value;
                 var compstate = document.getElementById("cmpstate").value;
                 if (bc == compstate ) {
                     document.getElementById('cgst1').style.display = 'flex';

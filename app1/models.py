@@ -2118,10 +2118,10 @@ class recurring_bill(models.Model):
     sgst = models.FloatField(null=True,blank=True)
     tax_amount =  models.FloatField(null=True,blank=True)
     shipping_charge = models.FloatField(null=True,blank=True)
-    adjustment = models.FloatField(null=True,blank=True)
+    adjustment = models.FloatField(default=0,null=True,blank=True)
     grand_total = models.FloatField(null=True,blank=True)
     note = models.CharField(max_length=255,null=True)
-    paid_amount= models.FloatField(max_length=100,null=True)
+    paid_amount= models.FloatField(default=0,max_length=100,null=True)
     balance = models.FloatField(max_length=100,null=True)
     file = models.FileField(upload_to='purchase/rbill',default="default.png")
 
