@@ -8,26 +8,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js" ></script>
    
     <style>
-        #div1{
+        /* #div1{
             width: 33.33%;
             float: left;
             height: 100px;
             text-align: left;
         }
         #div2{
-            /* background-color: rgb(204, 0, 255); */
+           
             width: 33.33%;
             margin: auto;
             height: 100px;
             text-align: left;
         }
         #div3{
-            /* background-color: rgb(255, 162, 0); */
+           
             width: 33.33%;
             float: right;
             margin-top: -100px;
             height: 100px;    
-        }
+        } */
         .ribbon .ribbon-inner {
             text-align: center;
             color: #fff;
@@ -35,8 +35,7 @@
             left: -90px;
             width: 120px;
             padding: 3px;
-            /* position: relative;
-            transform: rotate(-45deg); */
+          
         }
         .ribbon .ribbon-open {
             background-color: #268ddd;
@@ -51,7 +50,7 @@
             --themeColor: #22b8d1;
             --pageShadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
         }
-        /* Font Include */
+      
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap');
         body {
             background-color: var(--body-bg);
@@ -62,11 +61,6 @@
             margin: 0 auto;
             position: relative;
             box-shadow: var(--pageShadow);
-        }
-        .page[size="A4"] {
-            width: 21cm;
-            height: 29.7cm;
-            overflow: hidden;
         }
         .bb {
             border-bottom: 3px solid var(--darkWhite);
@@ -106,7 +100,7 @@
             transform: rotate(45deg);
         }
         .top-left .graphic-path p {
-            /* color: var(--white); */
+          
             height: 40px;
             left: 0;
             right: -100px;
@@ -156,7 +150,7 @@
         .media p {
             font-weight: 400;
             margin: 0;
-            /* color: #000000; */
+          
         }
         .media p.title {
             font-weight: 600;    
@@ -217,20 +211,75 @@
             background-color:#000000;
             height: 1px;
         }
+
+        .tabcontent{
+        display: none;
+        padding: 6px 12px;
+        border-top: none;
+    }
+
+    .page {
+        /* background: azure; */
+        display: block;
+        margin: 0 auto;
+        position: relative;
+        /* box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5); */
+    }
+
+    .page[size="A4"] {
+        width: 17cm;
+        height: 23cm;
+        overflow: hidden;
+    }
+
+    .print-only {
+        display: none;
+        height: auto;
+        overflow-y: auto;
+        border: none;
+     
+    }
+
+    @media print {
+     
+        .page[size="A4"] {
+        width: 21cm;
+        height: 29.7cm;
+        }
+        body * {
+            visibility: hidden;
+        }
+
+        header {
+            display: none;
+        }
+
+        .print-only * {
+            visibility: visible;
+        }
+
+        .print-only {
+            /* position: absolute; */
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            height: auto;
+            page-break-before: always;
+            page-break-inside: avoid;
+            
+        }
+       
+        @page {
+            size:100%;
+            margin: 0;
+            height: auto;
+        }
+       
+    }
+
     </style>
 
-    <script>
-        async function generatePDF() {
-            var downloading = document.getElementById("whatToPrint");
-            var doc = new jsPDF('l', 'pt');
-
-            await html2canvas(downloading, {  
-            }).then((canvas) => {
-                doc.addImage(canvas.toDataURL("image/png"), 'PNG', 15, 10, 700, 850);
-            })
-            doc.save("Document.pdf");
-        } 
-    </script>
 
     <div class="page-content" >
         <div class="card radius-15">
@@ -238,6 +287,8 @@
                 <div class="card-title">
                     <center><h2 class="mb-0">RECURRING BILL VIEW</h2></center>
                     <hr>
+                    <a style="padding: 10px; cursor: pointer;" onclick="Details()" >Details</a>
+                    <a style="padding: 10px; cursor: pointer;" onclick="Overview()"> Overview</a>
                     <nav class="navbar navbar-expand-lg navbar-light" style="background-color:rgba(0,0,0,.01);">
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                           <span class="navbar-toggler-icon"></span>
@@ -245,7 +296,7 @@
                         <div class="collapse navbar-collapse" id="navbarScroll">
                             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                               <li class="nav-item active" >
-                                <a class="nav-link text-light btn" role="button" onclick="window.print()"><i class="fa fa-print">Print</i><span class="sr-only">(current)</span></a>
+                                <a class="nav-link text-light btn" role="button" onclick="window.print()"><i class="fa fa-print">Print</i></a>
                               </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle text-light btn" href="#" id="navbarDropdown" role="button"
@@ -281,7 +332,7 @@
                                     <a class="nav-link text-light btn" role="button" href=""><i class=" fa fa-pencil">Edit</i></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-light btn" role="button" href=""><i class="fa fa-trash-o delete">Delete</i></a>
+                                    <a class="nav-link text-light btn" role="button" href="{% url 'deleterbill' rbill.rbillid %}"><i class="fa fa-trash-o delete">Delete</i></a>
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle text-light btn" href="#" id="navbarDropdown" role="button"
@@ -302,7 +353,206 @@
             </div>
         </div>
     
-        <div  id="whatToPrint">
+        <div class="card card-registration card-registration-2" style="border-radius: 15px;"  >
+            <div class="card-body p-0" >
+               
+                <div id="details">
+                <div class="row g-0" >
+                   
+                    <div class="col-lg-8">
+                        <div class="p-5">
+                            <div class="d-flex justify-content-between align-items-center mb-5">
+                                <h1 class="fw-bold mb-0 text-black">{{rbill.profile_name}}</h1>
+                          
+                            </div>
+                            <hr class="my-4">
+                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                <div class="col-md-2 mt-3">
+                                    <h6 class="mb-0">Company</h6>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <p class="mb-0">{{ cmp1.cname}}</p>
+                                </div>
+                                <div class="col-md-2 mt-3 vl">
+                                    <h6 class="mb-0">Email</h6>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <p class="mb-0">{{ cmp1.cemail }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                <div class="col-md-2 mt-3">
+                                    <h6 class="mb-0">Mobile</h6>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <p class="mb-0">{{ cmp1.phone }}</p>
+                                </div>
+                                <div class="col-md-2 mt-3 vl">
+                                    <h6 class="mb-0">Address</h6>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <p class="mb-0">{{ cmp1.caddress }}</p>
+                                </div>
+                            </div>
+                            <hr class="my-4">
+                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                <div class="col-md-4 mt-3">
+                                    <h5 style="border-bottom: 1px solid rgba(128, 128, 128, 0.6); width: fit-content;">Billing Details</h5>
+                                </div>
+                                <div class="col-md-4 mt-3"></div>
+                                <div class="col-md-4 mt-3"></div>
+
+                                <div class="col-md-2 mt-3">
+                                    <h6 class="mb-0">Bill No</h6>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <p class="mb-0">{{ rbill.billno }}</p>
+                                </div>
+                                <div class="col-md-3 mt-3 vl">
+                                    <h6 class="mb-0">Payment Terms</h6>
+                                </div>
+                                <div class="col-md-3 mt-3">
+                                    <p class="mb-0">NET {{ rbill.payment_terms }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                <div class="col-md-2 mt-3">
+                                    <h6 class="mb-0">Repeat Every</h6>
+                                </div>
+                                <div class="col-md-2 mt-3">
+                                    <p class="mb-0">{{ rbill.repeat_every }}</p>
+                                </div>
+                                <div class="col-md-2 mt-3 vl">
+                                    <h6 class="mb-0">Start Date</h6>
+                                </div>
+                                <div class="col-md-2 mt-3">
+                                    <p class="mb-0">{{ rbill.start_date }}</p>
+                                </div>
+                                <div class="col-md-2 mt-3 vl">
+                                    <h6 class="mb-0">End date</h6>
+                                </div>
+                                <div class="col-md-2 mt-3">
+                                    <p class="mb-0">{{ rbill.end_date }}</p>
+                                </div>
+                            </div><hr>
+                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                <div class="col-md-4 mt-3">
+                                    <h5 style="border-bottom: 1px solid rgba(128, 128, 128, 0.6); width: fit-content;">Other Details</h5>
+                                </div>
+                                <div class="col-md-4 mt-3"></div>
+                                <div class="col-md-4 mt-3"></div>
+
+                                <div class="col-md-2 mt-3">
+                                    <h6 class="mb-0">Vendor</h6>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <p class="mb-0">{{rbill.vendor_name}}</p>
+                                </div>
+                                <div class="col-md-2 mt-3 vl">
+                                    <h6 class="mb-0">Customer</h6>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <p class="mb-0">{{ rbill.customer_name }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                <div class="col-md-2 mt-3">
+                                    <h6 class="mb-0">Payment Methods</h6>
+                                </div>
+                                <div class="col-md-2 mt-3">
+                                    <p class="mb-0">{{ rbill.payment_method}}</p>
+                                </div>
+                                <div class="col-md-2 mt-3 vl">
+                                    <h6 class="mb-0">Note</h6>
+                                </div>
+                                <div class="col-md-2 mt-3">
+                                    <p class="mb-0">{{rbill.note }}</p>
+                                </div>
+                                <div class="col-md-2 mt-3 vl">
+                                    <h6 class="mb-0">status</h6>
+                                </div>
+                                <div class="col-md-2 mt-3">
+                                    <p class="mb-0">{{ rbill.status}}</p>
+                                </div>
+                            </div>
+                            <hr class="my-4">
+                        </div>
+                        <section class="product-area mt-4 p-2">
+                            <table class="table table-hover table-bordered">
+                                <thead style="background-color: rgba(0, 0, 0, 0.4);">
+                                    <tr>
+                                        <td class="text-center">ITEMS</td>
+                                        <td class="text-center">HSN NUMBER</td>
+                                        <td class="text-center">QUANTITY</td>
+                                        <td class="text-center">PRICE</td>
+                                        <td class="text-center">TAX</td>
+                                        <td class="text-center">DISCOUNT</td>
+                                        <td class="text-center">TOTAL</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for rbill in ritem %}
+                                        <tr style="color: white;">
+                                            <td class="text-center" >{{ rbill.item }}</td>
+                                            <td class="text-center" >{{ rbill.hsn }}</td>
+                                            <td class="text-center" >{{ rbill.qty }}</td>
+                                            <td class="text-center" >{{ rbill.price  }}</td>
+                                            <td class="text-center" >{{ rbill.tax  }}</td>
+                                            <td class="text-center" >{{ rbill.discount }}</td>
+                                            <td class="text-center" >{{ rbill.total }}</td>
+                                        </tr>
+                                    {% endfor %} 
+                                </tbody>
+                            </table>
+                        </section>
+                    </div>
+                    <div class="col-lg-4 bg-grey" style="background-color: rgba(0, 0, 0, 0.4);">
+                        <div class="p-5">
+                          
+                            <h3 class="fw-bold mb-5 mt-2 pt-1">BILL</h3>
+                            <hr class="my-4">
+                            <div class="d-flex justify-content-between mb-4">
+                                <h5 class="">Grand Total</h5>
+                                <h6>{{ rbill.grand_total }}</h6>
+                            </div>
+                            <div class="d-flex justify-content-between mb-4">
+                                <h5 class="">Paid Amount</h5>
+                                <h6>{{ rbill.paid_amount }}</h6>
+                            </div>
+                           
+                            <div class="d-flex justify-content-between mb-4">
+                                <h5 class="">Balance</h5>
+                                <h6>{{ rbill.balance }}</h6>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-4">
+                                <h5 class="">Tax Amount</h5>
+                                <h6>{{rbill.tax_amount }}</h6>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between mb-4">
+                                <h5 class="">Adjustment</h5>
+                                <h6>{{rbill.adjustment }}</h6>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between mb-4">
+                                <h5 class="">Shipping Charge</h5>
+                                <h6>{{ rbill.shipping_charge}}</h6>
+                            </div>
+                            <div class="d-flex justify-content-between mb-4">
+                                <h5 class="">Status</h5>
+                                <h6>{{ rbill.status }}</h6>
+                            </div>
+                            <hr class="my-4">
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+
+        <div  id="whatToPrint" style="display: none;"  class="print-only tabcontent">
                 <div class="my-5 page" size="A4" >
                     <div class="p-5">
                         <div id="ember2512" class="tooltip-container ember-view ribbon text-ellipsis">
@@ -365,6 +615,7 @@
                                         <td>QUANTITY</td>
                                         <td>PRICE</td>
                                         <td>TAX</td>
+                                        <td>DISCOUNT</td>
                                         <td>TOTAL</td>
                                     </tr>
                                 </thead>
@@ -376,6 +627,7 @@
                                             <td class="text-center" style="color:#000">{{ rbill.qty }}</td>
                                             <td class="text-center" style="color:#000">{{ rbill.price  }}</td>
                                             <td class="text-center" style="color:#000">{{ rbill.tax  }}</td>
+                                            <td class="text-center" style="color:#000">{{ rbill.discount }}</td>
                                             <td class="text-center" style="color:#000">{{ rbill.total }}</td>
                                         </tr>
                                     {% endfor %} 
@@ -395,12 +647,12 @@
                                             <td style="color:black">Sub Total :</td>
                                             <td style="color:black">{{rbill.sub_total}}</td>
                                         </tr>
-                                        {% if rbill.discount != "0.00" %}
+                                        <!-- {% if rbill.discount != "0.00" %}
                                         <tr>
                                             <td style="color:black">Discount</td>
                                             <td style="color:black">{{rbill.discount}}</td>
                                         </tr>
-                                        {% endif %}
+                                        {% endif %} -->
                                         {% if rbill.igst != "0" %}
                                         <tr>
                                             <td style="color:black">IGST :</td>
@@ -430,8 +682,8 @@
                                 </div> 
                             </div>
                             <div class="row container-fluid  p-2 m-0">
-                                <div class="col-sm-3 m-0 p-0"><label style="color: #000;"><b>Authorized Signature</b></label></div>
-                                <div class="col-sm-4 m-0 p-0"><input type="text" id="sign"></div>
+                                <!-- <div class="col-sm-3 m-0 p-0"><label style="color: #000;"><b>Authorized Signature</b></label></div>
+                                <div class="col-sm-4 m-0 p-0"><input type="text" id="sign"></div> -->
                                 <div class="col-sm-4 m-0 p-0"></div>
                             </div>
                         </section>
@@ -462,7 +714,23 @@
                 </div>
             </div>
         </div>
+</div>
+</div>
 
+<script>
+        function Overview() {
+            
+            document.getElementById('whatToPrint').style.display = 'block';
+            document.getElementById('details').style.display = 'none';
+           
+            
+    }
+    function Details() {
+        document.getElementById('whatToPrint').style.display = 'none';
+        document.getElementById('details').style.display = 'block';
+    }
+    
+</script>
 
         <script type="text/javascript">
             $('.delete').click(function(e){

@@ -11,9 +11,9 @@
             color: #fff;
         }
     </style>
-    <!-- <script>
+    <script>
         $(':input[readonly]').css({'background-color':'rgba(0,0,0,.4)'});
-    </script> -->
+    </script>
 
     <div class="page-content">
         <div class="card radius-15">
@@ -137,7 +137,7 @@
       
                               <div class="col-md-3 mt-2">
                                   <label for="">Bill No.</label>
-                                  <input type="text" class="form-control" id="" name="billno" placeholder="BL1000">
+                                  <input type="text" class="form-control" id="" name="billno" placeholder="1000">
                               </div>
                               <div class="col-md-3 mt-2">
                                   <label for="">Profile Name </label>
@@ -1691,12 +1691,11 @@
                                         </div>
                                         </div>
                                    
-                                    <div class="row mt-5 mb-5">
-                                        <div class="col-md-4">
-                                            <a href="{% url 'goitem' %}"class="btn btn-outline-info rounded-pill w-25 text-light">BACK</a>                                   </div>
-                                        <div class="col-md-4">
+                                        <div class="row">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-4">
                                             <button class="btn btn-outline-info rounded-pill w-100 text-light" data-dismiss="modal" type="submit" id="itemSave">SUBMIT</button>
-                                        </div>
+                                        
                                         <div class="col-md-4"></div>
                                     </div>
                                 </div>
@@ -2394,8 +2393,8 @@ $(document).ready(function(){
                     <td style="display: none;"><input type="number" step="any" name='taxamount1' id="taxamount${roinc}" class="form-control taxamount" />
                     </td>
                     <td>
-                    <button type="button" id="1" class="btn  clone_row btn-outline-secondary ml-1 px-2 py-1 mx-1" style="width: 40px;" title="Clone Row">+</button><br>
-                    <button type="button" id="1" class="btn  remove_row btn-outline-secondary ml-1 px-2 py-1 mx-1 mt-1"  style="width: 40px;"title="Remove Row">-</button>
+                    <button type="button" id="${roinc}" class="btn  clone_row btn-outline-secondary ml-1 px-2 py-1 mx-1" style="width: 40px;" title="Clone Row">+</button><br>
+                    <button type="button" id="${roinc}" class="btn  remove_row btn-outline-secondary ml-1 px-2 py-1 mx-1 mt-1"  style="width: 40px;"title="Remove Row">-</button>
                     </td>
             </tr>
   
@@ -2403,6 +2402,7 @@ $(document).ready(function(){
     
  
  );
+
             });
             
         });
@@ -2473,6 +2473,7 @@ $(document).ready(function(){
                     console.log(response)
                     document.getElementById("modalItem").reset();
                     reloadItem();
+                    // reloadItem2()
                 },
             });        
             });
@@ -2487,7 +2488,7 @@ $(document).ready(function(){
             csrfmiddlewaretoken: '{{ csrf_token }}',
 
             success: function(data) {
-                var dropdown = $('#item1');
+                var dropdown = $('.item');
                 console.log(data)
                 dropdown.empty();
                 dropdown.append(`<option selected>Select Item</option>`);
@@ -2502,6 +2503,30 @@ $(document).ready(function(){
             }
             });
             }
+            // function reloadItem2() {
+            // $.ajax({
+            // url: "{% url 'item_dropdown_rbill' %}",
+            // type: "GET",
+            // dataType: "json",
+            // data: $(this).serialize(),
+            // csrfmiddlewaretoken: '{{ csrf_token }}',
+
+            // success: function(data) {
+            //     var dropdown = $('#item');
+            //     console.log(data)
+            //     dropdown.empty();
+            //     dropdown.append(`<option selected>Select Item</option>`);
+            //     $.each(data, function(key, value) {
+                
+            //         dropdown.append($('<option></option>').attr('value', key).text(value).val(value));
+            //     });
+
+            // },
+            // error: function(xhr, status, error) {
+            // console.error(xhr.responseText);
+            // }
+            // });
+            // }
 
    // calculation---------------------------
 

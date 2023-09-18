@@ -10,8 +10,8 @@
         }
     </style>
     
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+  
 
         <div class="page-content" id="test">
             <div class="card radius-15">
@@ -19,6 +19,10 @@
                     <div class="card-title">
                         <center><h2 class="mb-0">RECURRING BILL</h2></center>
                         <hr>
+                       
+                        <div class="btn-group col-md-2" style="float: right;">
+                            <a class="btn btn-outline-info text-grey" onclick="ExportToExcel('xlsx')">Export To Excel</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -31,8 +35,21 @@
                                 <center><i class="fa fa-search form-control" style="width: 60px;"></i></center>
                             </div>    
                         </div>
-                        <div class="col-md-4"></div>
-                        <div class="col-md-3"></div>
+                        <div class="col-md-2">
+                          
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Sort By
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{% url 'recurringbill_home' %}">All</a>
+                                    <a class="dropdown-item" href="{% url 'recur_custasc' %}">CUSTOMER NAME</a>
+                                    <a class="dropdown-item" href="{% url 'recur_profasc' %}">PROFILE NAME</a>
+                                    <a class="dropdown-item" href="{% url 'recur_billasc' %}">BILL NO</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5"></div>
                         <div class="btn-group col-md-2">
                             <a class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                 role="button">Filter By
@@ -92,7 +109,16 @@
                     return !~text.indexOf(val);
                 }).hide();
             });
-        </script>
+
+        function ExportToExcel(type, fn, dl) {
+        var elt = document.getElementById('table');
+        var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+        return dl ?
+            XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+            XLSX.writeFile(wb, fn || ('Recurring_bills.' + (type || 'xlsx')));
+    }
+</script>
+ 
 
 
     {% endif %}

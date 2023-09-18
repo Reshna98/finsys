@@ -42859,3 +42859,52 @@ def repeat_dropdown_rbill(request):
             options[option.id] = option.repeat
 
         return JsonResponse(options)
+
+def recur_custasc(request):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    rbill =recurring_bill.objects.filter(cid=cmp1).order_by('customer_name')
+
+    context = {
+            'rbill':rbill,
+            'cmp1': cmp1
+            }
+    return render(request,'app1/recurringbills_home.html',context)
+
+def recur_profasc(request):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    rbill =recurring_bill.objects.filter(cid=cmp1).order_by('profile_name')
+
+    context = {
+            'rbill':rbill,
+            'cmp1': cmp1
+            }
+    return render(request,'app1/recurringbills_home.html',context)
+
+
+
+def recur_billasc(request):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    rbill =recurring_bill.objects.filter(cid=cmp1).order_by('billno')
+
+    context = {
+            'rbill':rbill,
+            'cmp1': cmp1
+            }
+    return render(request,'app1/recurringbills_home.html',context)
+
+@login_required(login_url='regcomp')
+def deleterbill(request, id):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        rbill=recurring_bill.objects.get(rbillid=id)
+        ritem = recurringbill_item.objects.all().filter(bill=id)
+        rbill.delete() 
+        ritem.delete() 
+    
+        return redirect('recurringbill_home')
+    return redirect('recurringbill_home')
+ 
