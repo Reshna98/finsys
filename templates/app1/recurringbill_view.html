@@ -329,7 +329,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-light btn" role="button" href=""><i class=" fa fa-pencil">Edit</i></a>
+                                    <a class="nav-link text-light btn" role="button" href="{% url 'edit_recurringbill' rbill.rbillid %}"><i class=" fa fa-pencil">Edit</i></a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-light btn" role="button" href="{% url 'deleterbill' rbill.rbillid %}"><i class="fa fa-trash-o delete">Delete</i></a>

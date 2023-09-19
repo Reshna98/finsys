@@ -26,7 +26,7 @@
         </div>
         <div class="card radius-15" style="background-color: #243e54;">
             <div class="card-body">
-                <form action="{% url 'createrecurringbill' %}" method="post" enctype="multipart/form-data" autocomplete="off">
+                <form action="{% url 'update_recurringbill' rbill.rbillid %}" method="post" enctype="multipart/form-data" autocomplete="off">
                     {% csrf_token %}
                      <div class="card-title">
                       <h4 class="mb-0">Vendor Details</h4>
@@ -42,12 +42,13 @@
                                 <label for="validationCustom01">Select Vendor</label>
                                 <div class="d-flex">
                                     <select name="vendor_name" id="vendor" class="custom-select">
-                                        <option selected disabled>Select Vendor</option>
-                                        {% for v in vndr %}
-                                        <option value="{{v.vendorid}} {{ v.firstname }} {{ v.lastname }}">{{ v.title }} {{ v.firstname }} {{ v.lastname }}</option>
+                                        <option>Select Vendor</option>
+                                        
+                                        {% for vd in vndr %}
+                                        <option value="{{vd.vendorid}} {{ vd.firstname }} {{ vd.lastname }}" {% if vd.firstname == v.firstname and vd.lastname == v.lastname %}selected{% endif %}>{{ vd.title }} {{ vd.firstname }} {{ vd.lastname }}</option>
                                         {% endfor %}
                                     </select>
-                                    <a>
+                                        <a>
                                         <button type="button" class="btn btn-outline-secondary ml-1" 
                                         data-target="#newvendor" data-toggle="modal">+</button>
                                     </a>
@@ -91,76 +92,77 @@
                           </div>
                           <hr>
                           <div class="row">
-                              <div class="col-md-3 mt-2">
-                                  <label for="">Source of Supply</label>
-                                  <select name="sourceof_supply" id="plosur" class="form-control">
-                                    <option value="Andaman and Nicobar Islads">Andaman and Nicobar Islads</option>
-                                    <option value="Andhra Predhesh">Andhra Predhesh</option>
-                                    <option value="Arunachal Predesh">Arunachal Predesh</option>
-                                    <option value="Assam">Assam</option>
-                                    <option value="Bihar">Bihar</option>
-                                    <option value="Chandigarh">Chandigarh</option>
-                                    <option value="Chhattisgarh">Chhattisgarh</option>
-                                    <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
-                                    <option value="Damn anad Diu">Damn anad Diu</option>
-                                    <option value="Delhi">Delhi</option>
-                                    <option value="Goa">Goa</option>
-                                    <option value="Gujarat">Gujarat</option>
-                                    <option value="Haryana">Haryana</option>
-                                    <option value="Himachal Predesh">Himachal Predesh</option>
-                                    <option value="Jammu and Kashmir">Jammu and Kashmir</option>
-                                    <option value="Jharkhand">Jharkhand</option>
-                                    <option value="Karnataka">Karnataka</option>
-                                    <option value="Kerala" selected>Kerala</option>
-                                    <option value="Ladakh">Ladakh</option>
-                                    <option value="Lakshadweep">Lakshadweep</option>
-                                    <option value="Madhya Predesh">Madhya Predesh</option>
-                                    <option value="Maharashtra">Maharashtra</option>
-                                    <option value="Manipur">Manipur</option>
-                                    <option value="Meghalaya">Meghalaya</option>
-                                    <option value="Mizoram">Mizoram</option>
-                                    <option value="Nagaland">Nagaland</option>
-                                    <option value="Odisha">Odisha</option>
-                                    <option value="Puducherry">Puducherry</option>
-                                    <option value="Punjab">Punjab</option>
-                                    <option value="Rajasthan">Rajasthan</option>
-                                    <option value="Sikkim">Sikkim</option>
-                                    <option value="Tamil Nadu">Tamil Nadu</option>
-                                    <option value="Telangana">Telangana</option>
-                                    <option value="Tripura">Tripura</option>
-                                    <option value="Uttar Predesh">Uttar Predesh</option>
-                                    <option value="Uttarakhand">Uttarakhand</option>
-                                    <option value="West Bengal">West Bengal</option>
-                                    <option value="Other Territory">Other Territory</option>
-                                  </select>
-                              </div>
+                            <div class="col-md-3 mt-2">
+                                <label for="">Source of Supply</label>
+                                <select name="sourceof_supply" id="plosur" class="form-control">
+                                    <option value="Andaman and Nicobar Islands" {% if rbill.source_supply == "Andaman and Nicobar Islands" %} selected {% endif %}>Andaman and Nicobar Islands</option>
+                                    <option value="Andhra Pradesh" {% if rbill.source_supply == "Andhra Pradesh" %} selected {% endif %}>Andhra Pradesh</option>
+                                    <option value="Arunachal Pradesh" {% if rbill.source_supply == "Arunachal Pradesh" %} selected {% endif %}>Arunachal Pradesh</option>
+                                    <option value="Assam" {% if rbill.source_supply == "Assam" %} selected {% endif %}>Assam</option>
+                                    <option value="Bihar" {% if rbill.source_supply == "Bihar" %} selected {% endif %}>Bihar</option>
+                                    <option value="Chandigarh" {% if rbill.source_supply == "Chandigarh" %} selected {% endif %}>Chandigarh</option>
+                                    <option value="Chhattisgarh" {% if rbill.source_supply == "Chhattisgarh" %} selected {% endif %}>Chhattisgarh</option>
+                                    <option value="Dadra and Nagar Haveli" {% if rbill.source_supply == "Dadra and Nagar Haveli" %} selected {% endif %}>Dadra and Nagar Haveli</option>
+                                    <option value="Daman and Diu" {% if rbill.source_supply == "Daman and Diu" %} selected {% endif %}>Daman and Diu</option>
+                                    <option value="Delhi" {% if rbill.source_supply == "Delhi" %} selected {% endif %}>Delhi</option>
+                                    <option value="Goa" {% if rbill.source_supply == "Goa" %} selected {% endif %}>Goa</option>
+                                    <option value="Gujarat" {% if rbill.source_supply == "Gujarat" %} selected {% endif %}>Gujarat</option>
+                                    <option value="Haryana" {% if rbill.source_supply == "Haryana" %} selected {% endif %}>Haryana</option>
+                                    <option value="Himachal Pradesh" {% if rbill.source_supply == "Himachal Pradesh" %} selected {% endif %}>Himachal Pradesh</option>
+                                    <option value="Jammu and Kashmir" {% if rbill.source_supply == "Jammu and Kashmir" %} selected {% endif %}>Jammu and Kashmir</option>
+                                    <option value="Jharkhand" {% if rbill.source_supply == "Jharkhand" %} selected {% endif %}>Jharkhand</option>
+                                    <option value="Karnataka" {% if rbill.source_supply == "Karnataka" %} selected {% endif %}>Karnataka</option>
+                                    <option value="Kerala" {% if rbill.source_supply == "Kerala" %} selected {% endif %}>Kerala</option>
+                                    <option value="Ladakh" {% if rbill.source_supply == "Ladakh" %} selected {% endif %}>Ladakh</option>
+                                    <option value="Lakshadweep" {% if rbill.source_supply == "Lakshadweep" %} selected {% endif %}>Lakshadweep</option>
+                                    <option value="Madhya Pradesh" {% if rbill.source_supply == "Madhya Pradesh" %} selected {% endif %}>Madhya Pradesh</option>
+                                    <option value="Maharashtra" {% if rbill.source_supply == "Maharashtra" %} selected {% endif %}>Maharashtra</option>
+                                    <option value="Manipur" {% if rbill.source_supply == "Manipur" %} selected {% endif %}>Manipur</option>
+                                    <option value="Meghalaya" {% if rbill.source_supply == "Meghalaya" %} selected {% endif %}>Meghalaya</option>
+                                    <option value="Mizoram" {% if rbill.source_supply == "Mizoram" %} selected {% endif %}>Mizoram</option>
+                                    <option value="Nagaland" {% if rbill.source_supply == "Nagaland" %} selected {% endif %}>Nagaland</option>
+                                    <option value="Odisha" {% if rbill.source_supply == "Odisha" %} selected {% endif %}>Odisha</option>
+                                    <option value="Puducherry" {% if rbill.source_supply == "Puducherry" %} selected {% endif %}>Puducherry</option>
+                                    <option value="Punjab" {% if rbill.source_supply == "Punjab" %} selected {% endif %}>Punjab</option>
+                                    <option value="Rajasthan" {% if rbill.source_supply == "Rajasthan" %} selected {% endif %}>Rajasthan</option>
+                                    <option value="Sikkim" {% if rbill.source_supply == "Sikkim" %} selected {% endif %}>Sikkim</option>
+                                    <option value="Tamil Nadu" {% if rbill.source_supply == "Tamil Nadu" %} selected {% endif %}>Tamil Nadu</option>
+                                    <option value="Telangana" {% if rbill.source_supply == "Telangana" %} selected {% endif %}>Telangana</option>
+                                    <option value="Tripura" {% if rbill.source_supply == "Tripura" %} selected {% endif %}>Tripura</option>
+                                    <option value="Uttar Pradesh" {% if rbill.source_supply == "Uttar Pradesh" %} selected {% endif %}>Uttar Pradesh</option>
+                                    <option value="Uttarakhand" {% if rbill.source_supply == "Uttarakhand" %} selected {% endif %}>Uttarakhand</option>
+                                    <option value="West Bengal" {% if rbill.source_supply == "West Bengal" %} selected {% endif %}>West Bengal</option>
+                                    <option value="Other Territory" {% if rbill.source_supply == "Other Territory" %} selected {% endif %}>Other Territory</option>
+                                </select>
+                            </div>
+                            
       
                               <div class="col-md-3 mt-2">
                                   <label for="">Bill No.</label>
-                                  <input type="text" class="form-control" id="" name="billno" placeholder="1000">
+                                  <input type="text" class="form-control" id="" name="billno" placeholder="1000" value="{{rbill.billno}}">
                               </div>
                               <div class="col-md-3 mt-2">
                                   <label for="">Profile Name </label>
-                                  <input type="text" class="form-control" id="" name="profile_name" placeholder="">   
+                                  <input type="text" class="form-control" id="" name="profile_name" placeholder="" value="{{rbill.profile_name}}">   
                               </div>
                               <div class="col-md-3 mt-2">
                                 
                                 <label for="">Repeat Every</label>
                                 <div class="d-flex">
                                     <select class="form-control" name="repeat_every" id="repeat">
-                        
-                                        <option selected value="1 Week">Week</option>
-                                        <option value="2 Weeks">2 Weeks</option>
-                                        <option value="1 Month">Month</option>
-                                        <option value="2 Months">2 Months</option>
-                                        <option value="3 Months">3 Months</option>
-                                        <option value="6 Months">6 Months</option>
-                                        <option value="1 Year">Years</option>
-                                        <option value="2 Years">2 Years</option>
-                                        <option value="3 Years">3 Years</option>
-                                        <option value="6 Years">6 Years</option>
+                                        <option value="1 Week" {% if rbill.repeat_every == "1 Week" %} selected {% endif %}>1 Week</option>
+                                        <option value="2 Weeks" {% if rbill.repeat_every == "2 Weeks" %} selected {% endif %}>2 Weeks</option>
+                                        <option value="1 Month" {% if rbill.repeat_every == "1 Month" %} selected {% endif %}>1 Month</option>
+                                        <option value="2 Months" {% if rbill.repeat_every == "2 Months" %} selected {% endif %}>2 Months</option>
+                                        <option value="3 Months" {% if rbill.repeat_every == "3 Months" %} selected {% endif %}>3 Months</option>
+                                        <option value="6 Months" {% if rbill.repeat_every == "6 Months" %} selected {% endif %}>6 Months</option>
+                                        <option value="1 Year" {% if rbill.repeat_every == "1 Year" %} selected {% endif %}>1 Year</option>
+                                        <option value="2 Years" {% if rbill.repeat_every == "2 Years" %} selected {% endif %}>2 Years</option>
+                                        <option value="3 Years" {% if rbill.repeat_every == "3 Years" %} selected {% endif %}>3 Years</option>
+                                        <option value="6 Years" {% if rbill.repeat_every == "6 Years" %} selected {% endif %}>6 Years</option>
+                                        
                                         {% for r in re %}
-                                            <option value="{{ r.repeat}}">{{ r.repeat}}</option>
+                                            <option value="{{ r.repeat }}" {% if rbill.repeat_every == r.repeat %} selected {% endif %}>{{ r.repeat }}</option>
                                         {% endfor %}
                                     </select>
                                     <a>
@@ -183,9 +185,9 @@
                                 <label for="validationCustom01">Select Customer</label>
                                 <div class="d-flex">
                                     <select name="customer_name" id="customer" class="custom-select">
-                                        <option selected disabled>Select Customer</option>
-                                        {% for c in cust %}
-                                        <option value="{{c.customerid}} {{ c.firstname }} {{ c.lastname }}">{{ c.title }} {{ c.firstname }} {{ c.lastname }}</option>
+                                        <option selected >Select Customer</option>
+                                        {% for ct in cust %}
+                                        <option value="{{ct.customerid}} {{ ct.firstname }} {{ ct.lastname }}" {% if ct.firstname == c.firstname and ct.lastname == c.lastname %}selected{% endif %}>{{ ct.title }} {{ ct.firstname }} {{ ct.lastname }}</option>
                                         {% endfor %}
                                     </select>
                                     <a>
@@ -222,17 +224,17 @@
                           <div class="row">
                             <div class="col-md-3 mt-2">
                                 <label for="">Start Date</label>
-                                <input type="date" class="form-control" id="date" name="start_date" onchange="showdate()">
+                                <input type="date" class="form-control" id="date" name="start_date" onchange="showdate()" value="{{ rbill.start_date | date:'Y-m-d'  }}">
                             </div>
                             
 
                             <div class="col-md-3 mt-2">
                                 <label>End Date</label>
-                                <input type="text" id="duedat" class="form-control" name="end_date">
+                                <input type="text" id="duedat" class="form-control" name="end_date" value="{{ rbill.end_date}}">
                             </div>
                             <div class="col-md-3 mt-5">
-                                <input type="checkbox" id="never-expire-checkbox" onchange="toggleDateInput()" />
-                                <label for="never-expire-checkbox"  name="neverExp">Never Expires</label>
+                                <input type="checkbox" id="never-expire-checkbox" onchange="toggleDateInput()" {% if rbill.end_date is None %}checked="checked"{% endif %}/>
+                                <label for="never-expire-checkbox"  name="neverExp" >Never Expires</label>
                             </div>
 
                         </div>
@@ -241,13 +243,13 @@
                                 <label for="">Payment Terms</label>
                                 <div class="d-flex">
                                     <select class="custom-select" name="payment_terms" id="termadd2">
-                                        <option selected id="trmopt2"></option>
-                                        <option value="0">Due on Receipt</option>
-                                        <option value="15">NET 15</option>
-                                        <option value="30">NET 30</option>
-                                        <option value="60">NET 60</option>
+                                        <option value="" id="trmopt2">Select Payment Terms</option>
+                                        <option value="0" {% if rbill.payment_terms == '0' %}selected{% endif %}>Due on Receipt</option>
+                                        <option value="15" {% if rbill.payment_terms == '15' %}selected{% endif %}>NET 15</option>
+                                        <option value="30" {% if rbill.payment_terms == '30' %}selected{% endif %}>NET 30</option>
+                                        <option value="60" {% if rbill.payment_terms == '60' %}selected{% endif %}>NET 60</option>
                                         {% for pd in cpd %}
-                                            <option value="{{ pd.newperiod }}">NET {{ pd.newperiod }}</option>
+                                            <option value="{{ pd.newperiod }}" {% if rbill.payment_terms == pd.newperiod %}selected{% endif %}>NET {{ pd.newperiod }}</option>
                                         {% endfor %}
                                     </select>
                                     <a class="btn btn-outline-secondary ml-1" data-target="#crperiod2" data-toggle="modal">+</a>
@@ -259,12 +261,13 @@
                                 <label for="">Payment Methods</label>
                                 <div class="d-flex">
                                     <select class="custom-select" name="payment_method" id="method">
-                                        <option value="cash">Cash</option>
-                                        <option value="15">Cheque</option>
+                                        <option value="cash" {% if rbill.payment_method == 'cash' %}selected{% endif %}>Cash</option>
+                                        <option value="cheque" {% if rbill.payment_method == 'cheque' %}selected{% endif %}>Cheque</option>
                                         {% for b in bank %}
-                                            <option value="{{ b.bankname }}">{{b.bankname }}</option>
+                                            <option value="{{ b.bankname }}" {% if rbill.payment_method == b.bankname %}selected{% endif %}>{{ b.bankname }}</option>
                                         {% endfor %}
                                     </select>
+                                    
                                   
                                 </div> 
                             </div>
@@ -294,76 +297,80 @@
                                   </tr>
                                 </thead>
                                 <tbody id="items-table-body">
-                                  <tr id='addr01'>
-                                    <td class="nnum">1</td>
-                                    <td style="width: 20%;">
-                
-                                        <div class="d-flex">
-                                            <select name='item[]' id="item1" class="form-control item" style="background-color: #2f516f; color: white; ">
-                                                <option value=" " selected>Select Item</option>
-                                                
-                                                {% for i in item %}
-                                                {% if i.cid_id == cmp1.cid %}
-                                                    <option 
-                                                            value="{{ i.name  }}">{{ i.name  }} </option>
-                                                {% endif %}
-                                            {% endfor %}
-                                           </select>
-                
-                                            <a href="#">
-                                                <button type="button" class="btn btn-outline-secondary ml-1" 
-                                                data-target="#newitem" data-toggle="modal">+</button>
-                                            </a>
-                                        </div>
+                                    {% for j in ritem%}
+                                    <tr id='addr0{{ forloop.counter }}'>
+                                      <td class="nnum">{{ forloop.counter }} 
+                                        </td>
+                                      <td style="width: 20%;">
+                                          <div class="d-flex">
+                                        <select name='product[]' id="product{{ forloop.counter }}" class="form-control product" style="background-color: #2f516f; color: white;">
+                  
+                                          <option value="{{ j.product }}" selected>{{ j.item }}</option>
+                                          {% for i in item %}
+                                          {% if i.cid_id == cmp1.cid %}
+                                              <option 
+                                                      value="{{ i.name  }}">{{ i.name  }} </option>
+                                          {% endif %}
+                                          {% endfor %}
+                                          
+                                        </select>
+                                        <a href="#">
+                                          <button type="button" class="btn btn-outline-secondary ml-1" 
+                                          data-target="#newitem" data-toggle="modal">+</button>
+                                      </a>
+                                      </div>
+                                      </td>
+                                      <td><input type="text" name='hsn[]'  value="{{ j.hsn }}" id="hsn{{ forloop.counter }}" placeholder='Enter HSN Code' class="form-control" style="background-color: #2f516f; color: white;" /></td>
+                                      <!-- <td><input type="text" name='description[]'  value="{{ j.description }}"  id="description{{ forloop.counter }}" placeholder='Description' class="form-control" style="background-color: #2f516f; color: white;" /></td> -->
+                                      <td><input type="number" name='qty[]' value="{{ j.qty  }}"  placeholder='Enter Qty' id="qty{{ forloop.counter }}" value=0 class="form-control qty" step=0 min=0 style="background-color: #2f516f; color: white;" />
+                                        <span id="qtyspan{{ forloop.counter }}" class='text-muted'></span>
+                                      </td>
+                                      <td><input type="number" name='price[]' value="{{ j.price}}" id="unit{{ forloop.counter }}" placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0" style="background-color: #2f516f; color: white;" /></td>
                                       
-                                     
-                                    </td>
-                                    <td><input type="text" name='hsn[]' id="hsn1" placeholder='Enter HSN Code' class="form-control" style="background-color: #2f516f; color: white;" /></td>
-                                    <!-- <td><input type="text" name='description[]' id="description" placeholder='Description' class="form-control" style="background-color: #2f516f; color: white;" /></td> -->
-                                    <td><input type="number" name='qty[]'placeholder='Enter Qty' id="qty1" value=0 class="form-control qty" step=0 min=0 style="background-color: #2f516f; color: white; " />
-                                      <!-- <div style="margin-top: 5Px;" class="d-flex"><span>Available Qty :</span> <span id="qtyspan1" class=''></span></div> -->
-                                    </td>
-                                    <td><input type="number" name='price[]' id="unit1" placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0" style="background-color: #2f516f; color: white;" /></td>
-                                    
-                                    
-                                   
-                                    <td>
-                                      <input hidden value="{{cmp1.state}}" id="cmpstate">
-                                      <input type="text"  id="select_tax" placeholder="Tax Rate" class="form-control seltax d-flex">
-                                      <select name='tax1[]' id="tax11" class="form-control tax intra_tax d-none">
-                                          <option selected disabled >Select GST</option>
-                                          <option value=28 >28.0% GST(28%)</option>
-                                          <option value=18 >18.0% GST(18%)</option>
-                                          <option value=12  >12.0% GST(12%)</option>
-                                            <option value=5  >05.0% GST(05%)</option>
-                                          <option value=3  >03.0% GST(03%)</option>
-                                            <option value=0  >0.0% GST(0%)</option>
-                                      </select>
-                                      <select name='tax2[]' id="tax21" class="form-control tax inter_tax d-none">
-                                          <option selected disabled >Select IGST</option>
-                                          <option value=28 >28.0% IGST(28%)</option>
-                                          <option value=18 >18.0% IGST(18%)</option>
-                                          <option value=12  >12.0% IGST(12%)</option>
-                                            <option value=5  >05.0% IGST(05%)</option>
-                                          <option value=3  >03.0% IGST(03%)</option>
-                                            <option value=0  >0.0% IGST(0%)</option>
-                                      </select>
-                                                          
-                                    </td>
-                                    <td><input type="number" name='discount[]'  placeholder='Enter Discount' id="disc1" value=0 class="form-control disc" step=0 min=0 style="background-color: #2f516f;  color: white;"  />
+                                      <td>
+                                        <input hidden value="{{cmp1.state}}" id="cmpstate">
+                                        <input type="text"  id="select_tax" placeholder="Tax Rate" class="form-control seltax d-none">
+                                        <select name='tax1[]' id="tax1{{ forloop.counter }}" class="form-control tax intra_tax d-none">
+                                          <option selected value="{{j.tax}}">{{j.tax}}% GST ({{j.tax}}%)</option>
+                                            <option value=28 >28.0% GST(28%)</option>
+                                            <option value=18 >18.0% GST(18%)</option>
+                                            <option value=12  >12.0% GST(12%)</option>
+                                              <option value=5  >05.0% GST(05%)</option>
+                                            <option value=3  >03.0% GST(03%)</option>
+                                              <option value=0  >0.0% GST(0%)</option>
+                                        </select>
+                                        <select name='tax2[]' id="tax2{{ forloop.counter }}" class="form-control tax inter_tax d-none">
+                                          <option selected value="{{j.tax}}">{{j.tax}}% IGST ({{j.tax}}%)</option>
+                                            <option value=28 >28.0% IGST(28%)</option>
+                                            <option value=18 >18.0% IGST(18%)</option>
+                                            <option value=12  >12.0% IGST(12%)</option>
+                                              <option value=5  >05.0% IGST(05%)</option>
+                                            <option value=3  >03.0% IGST(03%)</option>
+                                              <option value=0  >0.0% IGST(0%)</option>
+                                        </select>
+                                                         
+                                      </td>
                 
-                                    <td><input type="number" name='total[]' id="total1" placeholder=0 class="form-control total" value=0 step="any" readonly style="background-color: #2f516f; color: white;" /></td>
-                                    <td style="display: none;"><input type="number" step="any" name='taxamount1' id="taxamount1" class="form-control taxamount"/></td>   
-                                    </td>
+                                    
                                     <td>
-                                        <button type="button" id="1" class="btn  clone_row btn-outline-secondary ml-1 px-2 py-1 mx-1" style="width: 40px;" title="Clone Row">+</button><br>
-                                        <button type="button" id="1" class="btn  remove_row btn-outline-secondary ml-1 px-2 py-1 mx-1 mt-1"  style="width: 40px;"title="Remove Row">-</button>
+                                    <input type="number" name='discount[]' placeholder='Enter Discount' id="disc{{forloop.counter}}" value="{{j.discount|default:0}}" class="form-control disc" step=0 min=0>
+                                     </td>
+                                      <td><input type="number" name='total[]' value="{{ j.total }}" id="total{{ forloop.counter }}" placeholder=0 class="form-control total" value=0 step="any" readonly style="background-color: #2f516f; color: white;" /></td>
+                                      <td style="display: none;"><input type="number" step="any" name='taxamount1' id="taxamount{{ forloop.counter }}" class="form-control taxamount" />
+                                      </td>
+                                    <td>
+                                        <button type="button" id="{{forloop.counter}}" class="btn  clone_row btn-outline-secondary ml-1 px-2 py-1 mx-1" style="width: 40px;" title="Clone Row">+</button><br>
+                                        <button type="button" id="{{forloop.counter}}" class="btn  remove_row btn-outline-secondary ml-1 px-2 py-1 mx-1 mt-1"  style="width: 40px;"title="Remove Row">-</button>
                                   </td>
-                                  </tr>
+                                </tr>
+                                {% endfor %}
+              
                                 </tbody>
+                                
                                 <tr>
                                     <td style="border: none;"><a class="btn btn-outline-secondary ml-1" role="button" id="add">+</a></td>
                                 </tr>
+                               
                               </table>
                 
                             </div>
@@ -372,7 +379,7 @@
                             <div class="col-md-6 mt-3">
                                 <label for="">Note</label>
                                 <div class="form-row">
-                                    <textarea class="form-control" name="note" rows="3"></textarea>
+                                    <textarea class="form-control" name="note" rows="3">{{rbill.note}}</textarea>
                                 </div><br>
                                 <div>
                                     <input type="file" class="form-control" name="file">
@@ -380,7 +387,7 @@
                                 <div class="row container-fluid p-2 m-0" style="background-color:rgba(0,0,0,.4); border: 1px solid rgba(128, 128, 128, 0.6);">
                                 <div class="col-md-4 mt-2 align-items-center">
                                     <label for="">Paid Amount</label>
-                                    <input type="number" class="form-control" value=0  step=0 min=0 id="paid_amount" name="paid_amount">
+                                    <input type="number" class="form-control"   step=0 min=0 id="paid_amount" name="paid_amount" value="{{rbill.paid_amount}}">
                                 </div>
                                 </div>
                                 <div>
@@ -394,7 +401,7 @@
                                       <div class="row container-fluid p-2 m-0">
                                           <div class="col-sm-4 mt-2"><label class="text-center">Sub Total</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" step="any" name='sub_total' placeholder=0 
+                                          <div class="col-sm-7 mt-2"><input type="number" step="any" name='sub_total' placeholder=0 value="{{rbill.sub_total}}"
                                               class="form-control" id="sub_total">
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -402,7 +409,7 @@
                                       <div class="row container-fluid p-2 m-0" id="igst1">
                                           <div class="col-sm-4 mt-2"><label for="a" class="text-center">IGST</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" name='igst' step="any" id="igst" placeholder=0 
+                                          <div class="col-sm-7 mt-2"><input type="number" name='igst' step="any" id="igst" placeholder=0 value="{{rbill.igst}}"
                                               class="form-control"/>
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -410,7 +417,7 @@
                                       <div class="row container-fluid p-2 m-0" style="display: none;" id="cgst1">
                                           <div class="col-sm-4 mt-2"><label for="a" class="text-center">CGST</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" name='cgst' step="any" id="cgst" placeholder=0 
+                                          <div class="col-sm-7 mt-2"><input type="number" name='cgst' step="any" id="cgst" placeholder=0 value="{{rbill.cgst}}"
                                               class="form-control"/>
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -418,7 +425,7 @@
                                       <div class="row container-fluid p-2 m-0" style="display: none;" id="sgst1">
                                           <div class="col-sm-4 mt-2"><label for="a" class="text-center">SGST</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" name='sgst' step="any" id="sgst" placeholder=0 
+                                          <div class="col-sm-7 mt-2"><input type="number" name='sgst' step="any" id="sgst" placeholder=0 value="{{rbill.sgst}}"
                                               class="form-control"/>
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -426,7 +433,7 @@
                                       <div class="row container-fluid p-2 m-0">
                                           <div class="col-sm-4 mt-2"><label for="a" class="text-center">Tax Amount</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" step="any" name='tax_amount' id="tax_amount" placeholder='0.00' 
+                                          <div class="col-sm-7 mt-2"><input type="number" step="any" name='tax_amount' id="tax_amount" placeholder='0.00' value="{{rbill.tax_amount}}"
                                               class="form-control"/>
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -436,7 +443,7 @@
                                       <div class="row container-fluid p-2 m-0">
                                           <div class="col-sm-4 mt-2"><label for="a" class="text-center">Shipping Charge</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" step="any" name='shipping_charge' id="ship" placeholder='0.00'  value=0
+                                          <div class="col-sm-7 mt-2"><input type="number" step="any" name='shipping_charge' id="ship" placeholder='0.00'  value="{{rbill.shipping_charge}}"
                                               class="form-control"/>
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -444,7 +451,7 @@
                                       <div class="row container-fluid p-2 m-0">
                                           <div class="col-sm-4 mt-2"><label for="a" class="text-center">Adjustment</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" value=0  step=0 min=0 name='adjustment' id="adj" placeholder='0.00' 
+                                          <div class="col-sm-7 mt-2"><input type="number" value="{{rbill.adjustment}}"  step=0 min=0 name='adjustment' id="adj" placeholder='0.00' 
                                               class="form-control"/>
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -452,7 +459,7 @@
                                       <div class="row container-fluid p-2 m-0">
                                           <div class="col-sm-4 mt-2"><label for="a" class="text-center">Grand Total</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" name='grand_total' id="grandtotal" placeholder='0.00' readonly
+                                          <div class="col-sm-7 mt-2"><input type="number" name='grand_total' id="grandtotal" placeholder='0.00' readonly value="{{rbill.grand_total}}"
                                               class="form-control"/>
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -1899,8 +1906,10 @@ $(document).ready(function() {
                 $('#gstin_inp').val(" " + data.gstin);
                 $('#gst_trt_inp').val(" " + data.gsttype);
             }
+           
         });
     });
+    $('#vendor').trigger('change');
 });
 </script>
     <script>
@@ -2066,8 +2075,11 @@ $(document).on("click", "#customerSave", function(){
                 $('#gstin_inp1').val(" " + data.gstin);
                 $('#gst_trt_inp1').val(" " + data.gsttype);
             }
+            
         });
+     
     });
+    $('#customer').trigger('change');
 });
 
 $(document).on("click","#savecredit",function(){
@@ -2154,7 +2166,7 @@ $(document).ready(function() {
 });
 
 
-        $('#date').val(new Date().toJSON().slice(0,10));
+        // $('#date').val(new Date().toJSON().slice(0,10));
         $('#date3').val(new Date().toJSON().slice(0,10));
 
 
