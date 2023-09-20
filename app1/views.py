@@ -43025,40 +43025,61 @@ def update_recurringbill(request,id):
 
 
             total = request.POST.getlist("total[]")
-            ritemid = request.POST.getlist("id[]")
-            billid=recurring_bill.objects.get(rbillid = rbl.rbillid)
-            if len(item)==len(hsn)==len(discount)==len(qty)==len(price)==len(tax)==len(total):
-                try:
-                    mapped=zip(item,hsn,discount,qty,price,tax,total)
-                    mapped=list(mapped)
+           
+   
+            rbillid=recurring_bill.objects.get(rbillid = rbl.rbillid)
+            if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(discount)==len(total):
+             
+                mapped=zip(item,hsn,qty,price,tax,discount,total)
+                mapped=list(mapped)
                 
+                count = recurringbill_item.objects.filter(bill=rbl.rbillid).count()
                 
-                    count = recurringbill_item.objects.filter(bill=rbl.rbillid).count()
+                for ele in mapped:
+                    print(ele)
+                    if int(len(item))>int(count):
+
+                        pbillss=recurring_bill.objects.get(rbillid=id)
+                        cmp1 = company.objects.get(id=request.session['uid'])
                         
-                    for ele in mapped:
+
+                        billAdd,created = recurringbill_item.objects.get_or_create(item = ele[0],hsn=ele[1],
+                        qty=ele[2],price=ele[3],tax=ele[4],discount = ele[5],total=ele[6],bill_id=pbillss.rbillid,cid=cmp1)
                         
-                        if int(len(item))>int(count):
-                            
-                            billAdd,created = recurringbill_item.objects.get_or_create(item = ele[0],hsn=ele[1],discount=ele[2],
-                            qty=ele[3],price=ele[4],tax=ele[5],total=ele[6],bill=billid, cid=cmp1 )
+                       
 
-                        else:
-                            print("welcome")
-                            dbs=recurringbill_item.objects.get(bill=rbl.rbillid,item= ele[0],hsn=ele[1])
-                            created = recurringbill_item.objects.filter(bill =dbs.bill,cid=cmp1).update(item = ele[0],hsn=ele[1],discount=ele[2],
-                            qty=ele[3],price=ele[4],tax=ele[5],total=ele[6])
-
-
-                    return redirect('view_rbill',id)
-                    
-                except:
-                    mapped=zip(item,hsn,discount,qty,price,tax,total,billid)
-                    mapped=list(mapped)
-
-                    count = recurringbill_item.objects.filter(bill=rbl.rbillid).count()
-                        
-                    for ele in mapped:
-                        created = recurringbill_item.objects.filter(bill =dbs.bill,cid=cmp1).update(item = ele[0],hsn=ele[1],discount=ele[2],qty=ele[3],price=ele[4],tax=ele[5],total=ele[6])
-                    return redirect('view_rbill',id)
-        else:
+                    else:
+                      
+                        dbs=recurringbill_item.objects.get(bill=rbl.rbillid,item=ele[0],hsn=ele[1])
+                        created =recurringbill_item.objects.filter(bill =dbs.bill,item=ele[0],hsn=ele[1]).update(item = ele[0],hsn=ele[1],
+                    qty=ele[2],price=ele[3],tax=ele[4],discount=ele[5],total=ele[6])
+                       
             return redirect('view_rbill',id)
+        return redirect('recurringbill_home')
+    
+            
+            # billid=recurring_bill.objects.get(rbillid =rbl.rbillid)
+            # if len(item)==len(hsn)==len(discount)==len(qty)==len(price)==len(tax)==len(total):
+              
+            #         mapped=zip(item,hsn,discount,qty,price,tax,total)
+            #         mapped=list(mapped)
+                
+            #         count = recurringbill_item.objects.filter(bill=billid).count()
+                        
+            #         for ele in mapped:
+                        
+            #             if int(len(item))>int(count):
+                            
+            #                 rbillAdd,created = recurringbill_item.objects.get_or_create(item= ele[0],hsn=ele[1],discount=ele[2],
+            #                 qty=ele[3],price=ele[4],tax=ele[5],total=ele[6],bill=billid, cid=cmp1 )
+
+            #             else:
+            #                 print("welcome")
+            #                 dbs=recurringbill_item.objects.get(bill=rbl.rbillid,item = ele[0],hsn=ele[1])
+            #                 created = recurringbill_item.objects.filter(bill =dbs.bill,item = ele[0],hsn=ele[1]).update(item= ele[0],hsn=ele[1],description=ele[2],
+            #                 qty=ele[3],price=ele[4],tax=ele[5],total=ele[6])
+
+
+            #         return redirect('view_rbill',id)
+               
+            # return redirect('view_rbill',id)
