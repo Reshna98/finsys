@@ -1,3 +1,4 @@
+<!-- reshna-recurringbill -->
 {% extends 'app1/base.html' %}
 {% block body %}
     {% load static %}
@@ -299,7 +300,7 @@
                                 <tbody id="items-table-body">
                                     {% for j in ritem%}
                                     <tr id='addr0{{ forloop.counter }}'>
-                                      <td class="nnum">{{ forloop.counter }} 
+                                      <td class="nnum">{{ forloop.counter }}  <input type="text"  name='id[]' value="{{ j.id }}" hidden>
                                         </td>
                                       <td style="width: 20%;">
                                           <div class="d-flex">
@@ -2403,7 +2404,7 @@ $(document).ready(function(){
 
         `
         <tr id='addr0${roinc}'>
-          <td class = 'nnum'>${roinc}</td>
+          <td class = 'nnum'>${roinc}<input type="text"  name='id[]' value= 0 hidden></td>
                     <td style="width: 20%;">
                       <div class="d-flex">
                       <select name='item[]' id="item${roinc}" class="form-control item" style="background-color: #2f516f; color: white;">
@@ -2636,16 +2637,20 @@ $(document).ready(function(){
                 
                 calc();
             });
-        
 
             $(document).on('click','.clone_row',function(){
                 var roinc = $("#items-table-body tr").length;
                 var originalRow = $(this).closest('#items-table-body tr'); 
                 var clonedRow = originalRow.clone();
 
+                // var newId = parseInt(clonedRow.attr('id').replace('addr0', ''))+1;
                 clonedRow.attr('id', 'addr0' +(roinc+1));
 
                 clonedRow.find('.nnum').text(roinc+1);
+
+                var hiddenInput = originalRow.find('input[name="id[]"]').clone();
+                hiddenInput.val(0);
+                clonedRow.find('.nnum').append(hiddenInput);
 
                 clonedRow.find('[id]').each(function() {
                     var oldId = $(this).attr('id');
@@ -2668,9 +2673,6 @@ $(document).ready(function(){
                 calc();
                 
             });
-            $(document).ready(function(){
-
-            
             $('#items-table-body').on('keyup change', function () {
                 calc();
             });
@@ -2678,7 +2680,7 @@ $(document).ready(function(){
             $('#tax').on('keyup change', function () {
                 calc_total();
             });
-          });
+         
 
         function calc() {
             $('#tab_logic tbody tr').each(function () {

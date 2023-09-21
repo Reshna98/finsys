@@ -42999,18 +42999,13 @@ def update_recurringbill(request,id):
             rbl.grand_total = grand_total
             rbl.balance = round(float(grand_total - paid_amount), 3)
             rbl.save()
-            
             if len(request.FILES) != 0:
-                if rbl.file != "default.jpg":
-                    rbl.file = request.FILES['file']
-                rbl.save()
+                # if len(rbl.file) > 0  :
+                #     os.remove(rbl.file.path)
+                    
+                rbl.file = request.FILES.get('file')
 
-        
-
-        
-           
-               
-        
+            rbl.save()
             item = request.POST.getlist("item[]")
             hsn  = request.POST.getlist("hsn[]")
             qty = request.POST.getlist("qty[]")
@@ -43025,61 +43020,115 @@ def update_recurringbill(request,id):
 
 
             total = request.POST.getlist("total[]")
-           
-   
-            rbillid=recurring_bill.objects.get(rbillid = rbl.rbillid)
-            if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(discount)==len(total):
-             
-                mapped=zip(item,hsn,qty,price,tax,discount,total)
-                mapped=list(mapped)
-                
-                count = recurringbill_item.objects.filter(bill=rbl.rbillid).count()
-                
-                for ele in mapped:
-                    print(ele)
-                    if int(len(item))>int(count):
 
-                        pbillss=recurring_bill.objects.get(rbillid=id)
-                        cmp1 = company.objects.get(id=request.session['uid'])
-                        
+            ritemid = request.POST.getlist("id[]")
 
-                        billAdd,created = recurringbill_item.objects.get_or_create(item = ele[0],hsn=ele[1],
-                        qty=ele[2],price=ele[3],tax=ele[4],discount = ele[5],total=ele[6],bill_id=pbillss.rbillid,cid=cmp1)
-                        
-                       
+            item_ids = [int(id) for id in ritemid]
 
-                    else:
-                      
-                        dbs=recurringbill_item.objects.get(bill=rbl.rbillid,item=ele[0],hsn=ele[1])
-                        created =recurringbill_item.objects.filter(bill =dbs.bill,item=ele[0],hsn=ele[1]).update(item = ele[0],hsn=ele[1],
-                    qty=ele[2],price=ele[3],tax=ele[4],discount=ele[5],total=ele[6])
-                       
-            return redirect('view_rbill',id)
-        return redirect('recurringbill_home')
-    
+            # est= estimate.objects.get(estimateid=upd.estimateid)
+
+            # est_item = estimate_item.objects.filter(estimate=est)
+            rbil= recurring_bill.objects.get(rbillid=rbl.rbillid)
+
+            rbil_item = recurringbill_item.objects.filter(bill=rbil)
             
-            # billid=recurring_bill.objects.get(rbillid =rbl.rbillid)
-            # if len(item)==len(hsn)==len(discount)==len(qty)==len(price)==len(tax)==len(total):
-              
-            #         mapped=zip(item,hsn,discount,qty,price,tax,total)
-            #         mapped=list(mapped)
-                
-            #         count = recurringbill_item.objects.filter(bill=billid).count()
+            object_ids = [obj.id for obj in rbil_item]
+
+            ids_to_delete = [obj_id for obj_id in object_ids if obj_id not in item_ids]
+            print(item_ids)
+            print(object_ids)
+            print(ids_to_delete)
+            recurringbill_item.objects.filter(id__in=ids_to_delete).delete()
+            
+            
+            count = recurringbill_item.objects.filter(bill=rbil.rbillid,cid=cmp1).count()
+            if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(discount)==len(total):
+                try:
+                    mapped=zip(item,hsn,qty,price,tax,discount,total,item_ids)
+                    mapped=list(mapped)
+                    print(mapped)
+                    
+                    for ele in mapped:
                         
-            #         for ele in mapped:
+                        if int(len(item))>int(count):
+                            if ele[7] == 0:
+                                print('added')
+
+                                itemAdd= recurringbill_item.objects.create(item = ele[0],hsn=ele[1],
+                                qty=ele[2],price=ele[3],tax=ele[4],discount = ele[5],total=ele[6] ,bill_id=id,cid=cmp1)
+
+                            else:
+                                itemAdd = recurringbill_item.objects.filter(id=ele[7],cid=cmp1).update(item = ele[0],hsn=ele[1],qty=ele[2],price=ele[3],tax=ele[4],discount= ele[5],total=ele[6])
+                        else:
+                            itemAdd = recurringbill_item.objects.filter(id=ele[7],cid=cmp1).update(item = ele[0],hsn=ele[1],qty=ele[2],price=ele[3],tax=ele[4],discount= ele[5],total=ele[6])
+
+                    
+                except:
+                        mapped=zip(item,hsn,qty,price,tax,discount,total,item_ids)
+                        mapped=list(mapped)
                         
-            #             if int(len(item))>int(count):
+                        for ele in mapped:
+                            print('cnhh')
+                            # dbs=estimate_item.objects.get(id=ele[7] ,cid=cmp1.cid)
                             
-            #                 rbillAdd,created = recurringbill_item.objects.get_or_create(item= ele[0],hsn=ele[1],discount=ele[2],
-            #                 qty=ele[3],price=ele[4],tax=ele[5],total=ele[6],bill=billid, cid=cmp1 )
-
-            #             else:
-            #                 print("welcome")
-            #                 dbs=recurringbill_item.objects.get(bill=rbl.rbillid,item = ele[0],hsn=ele[1])
-            #                 created = recurringbill_item.objects.filter(bill =dbs.bill,item = ele[0],hsn=ele[1]).update(item= ele[0],hsn=ele[1],description=ele[2],
-            #                 qty=ele[3],price=ele[4],tax=ele[5],total=ele[6])
+                            created =recurringbill_item.objects.filter(id=ele[7] ,cid=cmp1).update(item = ele[0],hsn=ele[1],qty=ele[2],price=ele[3],tax=ele[4],discount = ele[5],total=ele[6])
 
 
-            #         return redirect('view_rbill',id)
-               
-            # return redirect('view_rbill',id)
+            return redirect('view_rbill',id)
+        else:
+            return redirect('view_rbill')
+@login_required(login_url='regcomp')
+
+def rbill_file(request,id):
+    cmp1 = company.objects.get(id=request.session['uid'])
+    rbill = recurring_bill.objects.get(rbillid=id,cid=cmp1)
+
+    if request.method == 'POST':
+        
+        if len(request.FILES) != 0:
+           
+            # if rbill.file != "default.jpg":
+            #     os.remove(rbill.file.path)
+                
+            rbill.file=request.FILES['file']
+        
+        rbill.save()
+        return redirect('view_rbill',id)
+
+def pdfrbill_view(request,id):
+
+    cmp1 = company.objects.get(id=request.session['uid'])
+   
+
+    rbill=recurring_bill.objects.get(rbillid=id)
+    ritem = recurringbill_item.objects.all().filter(bill=id)
+
+    total = rbill.grand_total
+    words_total = num2words(total)
+    template_path = 'app1/pdf_rbill.html'
+    context ={
+        'rbill':rbill,
+        'cmp1':cmp1,
+        'ritem':ritem,
+
+    }
+    fname=rbill.billno
+   
+    # Create a Django response object, and specify content_type as pdftemp_creditnote
+    response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] =f'attachment; filename= {fname}.pdf'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    
+
+
+    # if error then show some funy view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response

@@ -2096,7 +2096,7 @@ class EmployeeLoan(models.Model):
       company = models.ForeignKey(company, on_delete=models.CASCADE)
       status = models.CharField(max_length=20,null=True)
 
-########################recurring bill-reshna#############
+########################recurring bill-reshna-start#############
 
 class recurring_bill(models.Model):
     cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
@@ -2146,3 +2146,4 @@ class repeatevery(models.Model):
     cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
     repeat=models.CharField(max_length=100,null=True,blank=True)  
 
+########################recurring bill-reshna-end###########
