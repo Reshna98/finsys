@@ -42329,7 +42329,7 @@ def deleteloan(request,eid):
     employee.delete()
     return redirect('employeeloanpage')
 
-# # recurring_bills-Reshna
+# # recurring_bills-Reshna-start
 @login_required(login_url='regcomp')
 def recurringbill_home(request):
     cmp1 = company.objects.get(id=request.session["uid"])
@@ -42445,16 +42445,21 @@ def createrecurringbill(request):
             start_date=request.POST.get('start_date')
             end_date=request.POST.get('end_date')
             paid_amount=request.POST.get('paid_amount')
-            paid_amount = float(paid_amount)
-            grand_total = float(grand_total)
+            balance=request.POST.get('balance')
+            if 'save_as_billed' in request.POST:
+                status = 'Billed'
+            elif 'save_as_draft' in request.POST:
+                status = 'Draft'
+            # paid_amount = float(paid_amount)
+            # grand_total = float(grand_total)
             # balance = float(grand_total - paid_amount)
-            balance = round(float(grand_total - paid_amount), 3)
+            # balance = round(float(grand_total - paid_amount), 3)
             bill = recurring_bill(vendor_name=vname,customer_name =cname,repeat_every=repeat_every,profile_name=profile_name,
                                     payment_method=payment_method,start_date=start_date,end_date=end_date, paid_amount= paid_amount,
                                     source_supply=sourceofsupply,sub_total=sub_total,sgst=sgst,adjustment=adjustment,balance=balance,note= note,
                                     shipping_charge=shipping_charge, payment_terms= payment_terms,
                                     cgst=cgst,igst=igst,tax_amount=tax_amount,
-                                    grand_total=grand_total,cid=cmp1,billno=billno)
+                                    grand_total=grand_total,cid=cmp1,billno=billno,status=status)
 
             if len(request.FILES) != 0:
                 bill.file=request.FILES['file'] 
@@ -42987,17 +42992,17 @@ def update_recurringbill(request,id):
             rbl.cgst=request.POST.get('cgst')
             rbl.igst=request.POST.get('igst')
             rbl.tax_amount=request.POST.get('tax_amount')
-            grand_total=request.POST.get('grand_total')
-            # balance=request.POST.get('balance')
+            rbl.grand_total=request.POST.get('grand_total')
             rbl.adjustment=request.POST.get('adjustment')
             rbl.note=request.POST.get('note')
             rbl.start_date=request.POST.get('start_date')
             rbl.end_date=request.POST.get('end_date')
-            paid_amount = float(request.POST.get('paid_amount'))
-            grand_total = float(request.POST.get('grand_total'))
-            rbl.paid_amount = paid_amount
-            rbl.grand_total = grand_total
-            rbl.balance = round(float(grand_total - paid_amount), 3)
+            # paid_amount = float(request.POST.get('paid_amount'))
+            # grand_total = float(request.POST.get('grand_total'))
+            rbl.paid_amount = request.POST.get('paid_amount')
+            rbl.grand_total = request.POST.get('grand_total')
+            # rbl.balance = round(float(grand_total - paid_amount), 3)
+            rbl.balance = request.POST.get('balance')
             rbl.save()
             if len(request.FILES) != 0:
                 # if len(rbl.file) > 0  :
@@ -43132,3 +43137,4 @@ def pdfrbill_view(request,id):
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+# # recurring_bills-Reshna-end

@@ -1085,7 +1085,7 @@ urlpatterns = [
     path('removerecinv',views.removerecinv,name='removerecinv'),
     path('gorecinvoices3',views.gorecinvoices3,name='gorecinvoices3'),
 
-    # #recurringbills_reshna
+    # #recurringbills_reshna_start
     path('recurringbill_home',views.recurringbill_home,name='recurringbill_home'),
     path('addrecurringbill',views.addrecurringbill,name='addrecurringbill'),
     path('createrecurringbill',views.createrecurringbill,name='createrecurringbill'),
@@ -1117,6 +1117,7 @@ urlpatterns = [
     path('edit_recurringbill<int:id>',views.edit_recurringbill,name='edit_recurringbill'),
     path('rbill_file<int:id>',views.rbill_file,name='rbill_file'),
     path('pdfrbill_view<int:id>',views.pdfrbill_view,name='pdfrbill_view'),
+    # # recurring_bills-Reshna-end
     # path('',views.,name=''),
     # path('',views.,name=''),
     # path('',views.,name=''),

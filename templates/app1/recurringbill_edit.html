@@ -384,13 +384,14 @@
                                 </div><br>
                                 <div>
                                     <input type="file" class="form-control" name="file">
-                                </div><br>
+                                </div>
+                                <!-- <br>
                                 <div class="row container-fluid p-2 m-0" style="background-color:rgba(0,0,0,.4); border: 1px solid rgba(128, 128, 128, 0.6);">
                                 <div class="col-md-4 mt-2 align-items-center">
                                     <label for="">Paid Amount</label>
                                     <input type="number" class="form-control"   step=0 min=0 id="paid_amount" name="paid_amount" value="{{rbill.paid_amount}}">
                                 </div>
-                                </div>
+                                </div> -->
                                 <div>
                                 </div>
                             </div>
@@ -452,7 +453,7 @@
                                       <div class="row container-fluid p-2 m-0">
                                           <div class="col-sm-4 mt-2"><label for="a" class="text-center">Adjustment</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" value="{{rbill.adjustment}}"  step=0 min=0 name='adjustment' id="adj" placeholder='0.00' 
+                                          <div class="col-sm-7 mt-2"><input type="number" value="{{rbill.adjustment}}"  name='adjustment' id="adj" placeholder='0.00' 
                                               class="form-control"/>
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -465,6 +466,23 @@
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
                                       </div>
+                                      
+                                  <div class="row container-fluid p-2 m-0">
+                                    <div class="col-sm-4 mt-2"><label for="a" class="text-center">Paid Amount</label></div>
+                                    <div class="col-sm-1 mt-2">:</div>
+                                    <div class="col-sm-7 mt-2">
+                                        <input type="number" class="form-control" value={{rbill.paid_amount}}  step=0 min=0 id="paid_amount" name="paid_amount">
+                                    </div>
+                                    <div class="col-sm-4 m-0 p-0"></div>
+                                </div>
+                                <div class="row container-fluid p-2 m-0">
+                                    <div class="col-sm-4 mt-2"><label for="a" class="text-center">Balance</label></div>
+                                    <div class="col-sm-1 mt-2">:</div>
+                                    <div class="col-sm-7 mt-2"><input type="number" value={{rbill.balance}} name='balance' id="balance" placeholder='0.00' readonly
+                                        class="form-control"/>
+                                    </div>
+                                    <div class="col-sm-4 m-0 p-0"></div>
+                                </div>
                                   </div>
                                   
                               </div>
@@ -2730,7 +2748,8 @@ $(document).ready(function(){
             // console.log( ship);
             gtot = taxamount + total + ship;
             $('#grandtotal').val(gtot.toFixed(2));
-            $('#baldue').val(gtot.toFixed(2));
+            // $('#baldue').val(gtot.toFixed(2));
+            $('#balance').val(gtot.toFixed(2));
 
             test()
         }
@@ -2760,7 +2779,9 @@ $(document).ready(function(){
             var tax = $('#tax_amount').val();
             var sh = $("#ship").val();
             $('#grandtotal').val((parseFloat(subtot)+parseFloat(tax)+parseFloat(sh)).toFixed(2));
-            $('#baldue').val((parseFloat(subtot)+parseFloat(tax)+parseFloat(sh)).toFixed(2));
+            // $('#baldue').val((parseFloat(subtot)+parseFloat(tax)+parseFloat(sh)).toFixed(2));
+            var paidAmount = parseFloat($("#paid_amount").val()) || 0;
+            $('#balance').val(($('#grandtotal').val() - paidAmount).toFixed(2));
         });
 
         // $(document).on("change", "#adj", function(){
@@ -2774,8 +2795,24 @@ $(document).ready(function(){
             var sh = $("#ship").val();
             var ad=$("#adj").val();
             $('#grandtotal').val((parseFloat(subtot)+parseFloat(tax)+parseFloat(sh)+parseFloat(ad)).toFixed(2));
-            $('#baldue').val((parseFloat(subtot)+parseFloat(tax)+parseFloat(sh)+parseFloat(ad)).toFixed(2));
+            // $('#baldue').val((parseFloat(subtot)+parseFloat(tax)+parseFloat(sh)+parseFloat(ad)).toFixed(2));
+            var paidAmount = parseFloat($("#paid_amount").val()) || 0;
+            $('#balance').val(($('#grandtotal').val() - paidAmount).toFixed(2));
         });
+        $(document).on('keyup', "#paid_amount", function () {
+        var grandtotal = parseFloat($("#grandtotal").val()) || 0;
+        var paidAmount = parseFloat($("#paid_amount").val()) || 0;
+    //    $('#balance').val((grandtotal - paidAmount).toFixed(2));
+    if (paidAmount > grandtotal) {
+      
+        alert("Paid amount cannot be greater than the grand total.")
+        $("#paid_amount").val(grandtotal.toFixed(2)); 
+        $('#balance').val("0.00"); 
+       
+    }else
+    $('#balance').val(($('#grandtotal').val() - paidAmount).toFixed(2));
+
+       });
 
         $(document).on("click",".seltax",function(){
                 
