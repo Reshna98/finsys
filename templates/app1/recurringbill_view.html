@@ -279,7 +279,7 @@
         display: block;
         margin: 0 auto;
         position: relative;
-        /* box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5); */
+    
     }
 
     .page[size="A4"] {
@@ -343,8 +343,8 @@
                 <div class="card-title">
                     <center><h2 class="mb-0">RECURRING BILL VIEW</h2></center>
                     <hr>
-                    <a style="padding: 10px; cursor: pointer;" onclick="Details()" >Details</a>
-                    <a style="padding: 10px; cursor: pointer;" onclick="Overview()"> Overview</a>
+                    <a style="padding: 10px; cursor: pointer; font-size: large;" onclick="Details()" >Details</a>
+                    <a style="padding: 10px; cursor: pointer; font-size: large;" onclick="Overview()">Template</a>
                     <nav class="navbar navbar-expand-lg navbar-light" style="background-color:rgba(0,0,0,.01);">
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                           <span class="navbar-toggler-icon"></span>
@@ -431,6 +431,12 @@
                             </div>
                             <hr class="my-4">
                             <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                <div class="col-md-4 mt-3">
+                                    <h5 style="border-bottom: 1px solid rgba(128, 128, 128, 0.6); width: fit-content;">Company Details</h5>
+                                </div>
+                                <div class="col-md-4 mt-3"></div>
+                                <div class="col-md-4 mt-3"></div>
+
                                 <div class="col-md-2 mt-3">
                                     <h6 class="mb-0">Company</h6>
                                 </div>
@@ -541,7 +547,10 @@
                             </div>
                             <hr class="my-4">
                         </div>
+                        
                         <section class="product-area mt-4 p-2">
+                            
+
                             <table class="table table-hover table-bordered">
                                 <thead style="background-color: rgba(0, 0, 0, 0.4);">
                                     <tr>

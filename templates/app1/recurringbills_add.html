@@ -598,7 +598,7 @@
                                 <option selected disabled value="">Choose..</option>
                                 <option value="Registered Business - Regular">Registered Business - Regular <span><i>(Business that is registered under gst)</i></span></option>
                                 <option value="Registered Business - Composition">Registered Business - Composition (Business that is registered under composition scheme in gst)</option>
-                                <option value="unregistered Business">Unregistered Business (Business that has not been registered under gst)</option>
+                                <option value="Unregistered Business">Unregistered Business (Business that has not been registered under gst)</option>
                                 <option value="Overseas">Overseas (Import/Export of supply outside india)</option>
                                 <option value="Special Economic Zone (SEZ)">Special Economic Zone (SEZ) (Business that is located in a special economic zone of india or a SEZ developer)</option>
                                 <option value="Demed Exports">Demed Exports (Supply of woods to an exports oriented unit or againsed advanced authorization or export promotion capital woods)</option>
@@ -1833,30 +1833,6 @@
         
     });
 
-// function reloadVendor() {
-
-// $.ajax({
-//     url: "{% url 'vendor_dropdown_rbill' %}",
-//     type: "GET",
-//     dataType: "json",
-//     data: $(this).serialize(),
-//     csrfmiddlewaretoken: '{{ csrf_token }}',
-
-//     success: function(data) {
-//         var dropdown = $('#vendor');
-//         dropdown.empty();
-//     dropdown.append(`<option selected>Select Vendor</option>`);
-//         $.each(data, function(key, value) {
-//             console.log(value)
-//             dropdown.append($('<option></option>').attr('value', key).text(value[1] + " " +value[2] + " "+ value[3]).val(value[0] + " " +value[2] + " "+ value[3]));
-//         });
-//     },
-//     error: function(xhr, status, error) {
-//     console.error(xhr.responseText);
-//     }
-// });
-// }
-
 function reloadVendor() {
 
     $.ajax({
@@ -1876,17 +1852,7 @@ function reloadVendor() {
                 dropdown.append($('<option></option>').attr('value', key).text(value[1] + " " +value[2] + " "+ value[3]).val(value[0] + " " +value[2] + " "+ value[3]));
                 
             });
-    //         if (enteredVName) {
-    //         dropdown.find('option').filter(function() {
-    //         return $(this).text() === enteredVName;
-    //     }).prop('selected', true);
-        
-    //   }
-//     if (enteredVName) {
-//     dropdown.find('option:contains("' + enteredVName + '")').prop('selected', true);
-//     // Trigger the change event to load the selected vendor's details
-//     dropdown.trigger('change');
-// }
+ 
 
     
         },
@@ -1898,13 +1864,7 @@ function reloadVendor() {
 }
 $(document).ready(function() {
     $('#vendor').change(function() {
-        // var selectedValue = $("#vendor").val();
-        // // var values = selectedValue.split(' '); // Split by space
-        // var vendorid = values[0];
-        // // The rest of the values will be the name (firstname and lastname)
-        // var name = values.slice(1).join(' ');
 
-        // Send the vendorid to the server
         $.ajax({
             url: "{% url 'get_vendordet' %}", 
             data: { 
@@ -1923,7 +1883,14 @@ $(document).ready(function() {
                 $("#gst_trt_row").removeClass('d-none');
                 $("#gst_trt_row").addClass('d-flex');
                 $('#email_inp').val(" " + data.email);
-                $('#gstin_inp').val(" " + data.gstin);
+                // $('#gstin_inp').val(" " + data.gstin);
+                if (data.gsttype === "Unregistered Business" || data.gsttype === "Consumer" || data.gsttype === "Overseas") {
+                    $("#gstin_row").addClass('d-none');
+                    $("#gstin_row").removeClass('d-flex');
+                } else {
+                    $('#gstin_inp').val(" " + data.gstin);
+                }
+                
                 $('#gst_trt_inp').val(" " + data.gsttype);
             }
         });
@@ -2090,7 +2057,14 @@ $(document).on("click", "#customerSave", function(){
                 $("#gst_trt_row1").removeClass('d-none');
                 $("#gst_trt_row1").addClass('d-flex');
                 $('#email_inp1').val(" " + data.email);
-                $('#gstin_inp1').val(" " + data.gstin);
+                // $('#gstin_inp1').val(" " + data.gstin);
+                if (data.gsttype === "Unregistered Business" || data.gsttype === "Consumer" || data.gsttype === "Overseas") {
+                    $("#gstin_row1").addClass('d-none');
+                    $("#gstin_row1").removeClass('d-flex');
+                } else {
+                    $('#gstin_inp1').val(" " + data.gstin);
+                }
+                
                 $('#gst_trt_inp1').val(" " + data.gsttype);
             }
         });
