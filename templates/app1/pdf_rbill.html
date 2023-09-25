@@ -71,12 +71,6 @@
                     <div class="row bb pb-3">
                         <div class="col-7">
                             <p>FROM,</p>
-                            <h5>{{rbill.vendor_name}}</h5>
-                            
-                             
-                        </div>
-                        <div class="col-5">
-                            <p>TO,</p>
                             <h5>{{cmp1.cname }}</h5>
                             <p class="address "> {{cmp1.caddress}}<br>
                                 {{cmp1.city}},
@@ -84,12 +78,27 @@
                                 {{cmp1.pincode}}<br>
                                 {{cmp1.email}}<br>
                             </p>   
+                            
+                             
+                        </div>
+            
+                            <div class="col-5">
+                                <p>TO,</p>
+                                <h5>{{rbill.vendor_name}}</h5>
+                                <p class="address ">{{vendor_email}}<br>
+                                    {% if vendor_gstin %}
+                                      GSTIN:{{ vendor_gstin }}
+                                    {% endif %}
+                            </div>
                         </div>
                     </div>
                     <div class="row extra-info pt-3">
                         <div class="col-7">
                             <p>Deliver To Details: </p>
-                            <p>{{rbill.profile_name}}</p>
+                            <p class="address ">{{customer_email}}<br>
+                                {% if customer_gstin %}
+                                  GSTIN:{{ customer_gstin }}
+                                {% endif %}</p>
                           
                         </div>
                         <div class="col-5">

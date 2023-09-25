@@ -42371,10 +42371,23 @@ def view_rbill(request, id):
         cmp1 = company.objects.get(id=request.session["uid"])
         rbill= recurring_bill.objects.get(rbillid=id, cid=cmp1)
         ritem = recurringbill_item.objects.all().filter(bill=id)
-        context = {'rbill': rbill, 'cmp1': cmp1,'ritem':ritem}
+        vendor_full_name = rbill.vendor_name
+        first_name, last_name = vendor_full_name.split(' ')
+        Vendor = vendor.objects.get(firstname=first_name, lastname=last_name, cid=cmp1)
+        vendor_email = Vendor.email
+        vendor_gstin=Vendor.gstin
+        customer_full_name = rbill.customer_name
+        first_name, last_name = customer_full_name.split(' ')
+        Customer = customer.objects.get(firstname=first_name, lastname=last_name, cid=cmp1)
+        customer_email = Customer.email
+        customer_gstin=Customer.gstin
+        context = {'rbill': rbill, 'cmp1': cmp1,'ritem':ritem,'vendor_email':vendor_email,'vendor_gstin': vendor_gstin,
+        'customer_email':customer_email,'customer_gstin':customer_gstin}
         return render(request, 'app1/recurringbill_view.html', context)
     except:
         return redirect('view_rbill')
+
+
 
 @login_required(login_url='regcomp')
 def addrecurringbill(request):
@@ -43110,11 +43123,23 @@ def pdfrbill_view(request,id):
 
     total = rbill.grand_total
     words_total = num2words(total)
+    vendor_full_name = rbill.vendor_name
+    first_name, last_name = vendor_full_name.split(' ')
+    Vendor = vendor.objects.get(firstname=first_name, lastname=last_name, cid=cmp1)
+    vendor_email = Vendor.email
+    vendor_gstin=Vendor.gstin
+    customer_full_name = rbill.customer_name
+    first_name, last_name = customer_full_name.split(' ')
+    Customer = customer.objects.get(firstname=first_name, lastname=last_name, cid=cmp1)
+    customer_email = Customer.email
+    customer_gstin=Customer.gstin
     template_path = 'app1/pdf_rbill.html'
     context ={
         'rbill':rbill,
         'cmp1':cmp1,
         'ritem':ritem,
+        'vendor_email':vendor_email,'vendor_gstin': vendor_gstin,
+        'customer_email':customer_email,'customer_gstin':customer_gstin
 
     }
     fname=rbill.billno
