@@ -42376,13 +42376,15 @@ def view_rbill(request, id):
         Vendor = vendor.objects.get(firstname=first_name, lastname=last_name, cid=cmp1)
         vendor_email = Vendor.email
         vendor_gstin=Vendor.gstin
+        vendor_gsttype=Vendor.gsttype
         customer_full_name = rbill.customer_name
         first_name, last_name = customer_full_name.split(' ')
         Customer = customer.objects.get(firstname=first_name, lastname=last_name, cid=cmp1)
         customer_email = Customer.email
         customer_gstin=Customer.gstin
-        context = {'rbill': rbill, 'cmp1': cmp1,'ritem':ritem,'vendor_email':vendor_email,'vendor_gstin': vendor_gstin,
-        'customer_email':customer_email,'customer_gstin':customer_gstin}
+        customer_gsttype=Customer.gsttype
+        context = {'rbill': rbill, 'cmp1': cmp1,'ritem':ritem,'vendor_email':vendor_email,'vendor_gstin': vendor_gstin,'customer_gsttype':customer_gsttype,
+        'vendor_gsttype':vendor_gsttype ,'customer_email':customer_email,'customer_gstin':customer_gstin}
         return render(request, 'app1/recurringbill_view.html', context)
     except:
         return redirect('view_rbill')
@@ -43095,8 +43097,8 @@ def update_recurringbill(request,id):
             return redirect('view_rbill',id)
         else:
             return redirect('view_rbill')
-@login_required(login_url='regcomp')
 
+@login_required(login_url='regcomp')
 def rbill_file(request,id):
     cmp1 = company.objects.get(id=request.session['uid'])
     rbill = recurring_bill.objects.get(rbillid=id,cid=cmp1)

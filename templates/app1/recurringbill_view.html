@@ -518,15 +518,72 @@
                                 <div class="col-md-4 mt-3">
                                     <p class="mb-0">{{rbill.vendor_name}}</p>
                                 </div>
-                                <div class="col-md-2 mt-3 vl">
+                                <div class="col-md-3 mt-3 vl">
+                                    <h6 class="mb-0">Vendor Email</h6>
+                                </div>
+                               
+                                <div class="col-md-3 mt-3">
+                                    <p class="mb-0">{{vendor_email}}</p>
+                                </div></div>
+                                <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                <div class="col-md-2 mt-3 ">
                                     <h6 class="mb-0">Customer</h6>
                                 </div>
-                                <div class="col-md-4 mt-3">
+                                <div class="col-md-4 mt-3 ">
                                     <p class="mb-0">{{ rbill.customer_name }}</p>
                                 </div>
+                                <div class="col-md-3 mt-3 vl">
+                                    <h6 class="mb-0">Customer Email</h6>
+                                </div>
+                                <div class="col-md-3 mt-3">
+                                    <p class="mb-0">{{customer_email}}</p>
+                                </div>
+                            </div><div class="row mb-4 d-flex justify-content-between align-items-center">
+                               
+                
+                                <div class="col-md-3 mt-3 ">
+                                    <h6 class="mb-0">Customer GST Treatment</h6>
+                                </div>
+                                <div class="col-md-3 mt-3 ">
+                                    <p class="mb-0">{{ customer_gsttype }}</p>
+                                </div>
+                               
+                                <div class="col-md-3 mt-3 vl">
+                                    <h6 class="mb-0">Vendor GST Treatment</h6>
+                                </div>
+                                <div class="col-md-3 mt-3">
+                                    <p class="mb-0">{{vendor_gsttype}}</p>
+                                </div>
+                               
                             </div>
                             <div class="row mb-4 d-flex justify-content-between align-items-center">
-                                <div class="col-md-2 mt-3">
+                           
+                                {% if customer_gstin %}
+                                
+                                <div class="col-md-3 mt-3 ">
+                                    <h6 class="mb-0">Customer GSTIN</h6>
+                                </div>
+                                <div class="col-md-3 mt-3 ">
+                                    <p class="mb-0">{{ customer_gstin }}</p>
+                                </div>
+                                {%else%}
+                                <div class="col-md-3 mt-3 "></div>
+                                <div class="col-md-3 mt-3 "></div>
+                                {%endif%}
+                                {% if vendor_gstin %}
+                                <div class="col-md-3 mt-3 vl">
+                                    <h6 class="mb-0">Vendor GSTIN</h6>
+                                </div>
+                                <div class="col-md-3 mt-3">
+                                    <p class="mb-0">{{vendor_gstin}}</p>
+                                </div>
+                                {%else%}
+                                <div class="col-md-3 mt-3 "></div>
+                                <div class="col-md-3 mt-3 "></div>
+                                {%endif%}
+                            </div>
+                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                <div class="col-md-3 mt-3">
                                     <h6 class="mb-0">Payment Methods</h6>
                                 </div>
                                 <div class="col-md-2 mt-3">
@@ -535,7 +592,7 @@
                                 <div class="col-md-2 mt-3 vl">
                                     <h6 class="mb-0">Note</h6>
                                 </div>
-                                <div class="col-md-2 mt-3">
+                                <div class="col-md-1 mt-3">
                                     <p class="mb-0">{{rbill.note }}</p>
                                 </div>
                                 <div class="col-md-2 mt-3 vl">
@@ -690,7 +747,24 @@
                                 <h5 class="">Balance</h5>
                                 <h6>{{ rbill.balance }}</h6>
                             </div>
-
+                            {%if rbill.igst%}
+                            <div class="d-flex justify-content-between mb-4">
+                                <h5 class="">IGST</h5>
+                                <h6>{{ rbill.igst }}</h6>
+                            </div>
+                            {%endif%}
+                            {%if rbill.cgst%}
+                            <div class="d-flex justify-content-between mb-4">
+                                <h5 class="">CGST</h5>
+                                <h6>{{ rbill.cgst }}</h6>
+                            </div>
+                            {%endif%}
+                            {%if rbill.sgst%}
+                            <div class="d-flex justify-content-between mb-4">
+                                <h5 class="">SGST</h5>
+                                <h6>{{ rbill.sgst }}</h6>
+                            </div>
+                            {%endif%}
                             <div class="d-flex justify-content-between mb-4">
                                 <h5 class="">Tax Amount</h5>
                                 <h6>{{rbill.tax_amount }}</h6>
@@ -810,11 +884,11 @@
             
                         <section class="balance-info">
                             <div class="row">
-                                <div class="col-8">
+                                <div class="col-7">
                                     <p class="m-0 font-weight-bold" style="color:black"> Note: </p>
                                     <p style="color:black">{{rbill.note}}</p>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-5">
                                     <table class="table border-0 table-hover">
                                         <tr >
                                             <td style="color:black">Sub Total :</td>

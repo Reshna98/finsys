@@ -453,7 +453,7 @@
                                       <div class="row container-fluid p-2 m-0">
                                           <div class="col-sm-4 mt-2"><label for="a" class="text-center">Adjustment</label></div>
                                           <div class="col-sm-1 mt-2">:</div>
-                                          <div class="col-sm-7 mt-2"><input type="number" value="{{rbill.adjustment}}"  name='adjustment' id="adj" placeholder='0.00' 
+                                          <div class="col-sm-7 mt-2"><input type="number" value="{{rbill.adjustment}}"  step="any" name='adjustment' id="adj" placeholder='0.00' 
                                               class="form-control"/>
                                           </div>
                                           <div class="col-sm-4 m-0 p-0"></div>
@@ -471,7 +471,7 @@
                                     <div class="col-sm-4 mt-2"><label for="a" class="text-center">Paid Amount</label></div>
                                     <div class="col-sm-1 mt-2">:</div>
                                     <div class="col-sm-7 mt-2">
-                                        <input type="number" class="form-control" value={{rbill.paid_amount}}  step=0 min=0 id="paid_amount" name="paid_amount">
+                                        <input type="number" class="form-control" value={{rbill.paid_amount}} step="any"  id="paid_amount" name="paid_amount">
                                     </div>
                                     <div class="col-sm-4 m-0 p-0"></div>
                                 </div>
@@ -597,7 +597,7 @@
                                 <option selected disabled value="">Choose..</option>
                                 <option value="Registered Business - Regular">Registered Business - Regular <span><i>(Business that is registered under gst)</i></span></option>
                                 <option value="Registered Business - Composition">Registered Business - Composition (Business that is registered under composition scheme in gst)</option>
-                                <option value="Unregistered Business">Unregistered Business (Business that has not been registered under gst)</option>
+                                <option value="unregistered Business">Unregistered Business (Business that has not been registered under gst)</option>
                                 <option value="Overseas">Overseas (Import/Export of supply outside india)</option>
                                 <option value="Special Economic Zone (SEZ)">Special Economic Zone (SEZ) (Business that is located in a special economic zone of india or a SEZ developer)</option>
                                 <option value="Demed Exports">Demed Exports (Supply of woods to an exports oriented unit or againsed advanced authorization or export promotion capital woods)</option>
@@ -1072,7 +1072,7 @@
                                     <option selected disabled value="">Select GST Type</option>
                                     <option value="Registered Business - Regular">Registered Business - Regular <span><i>(Business that is registered under gst)</i></span></option>
                                     <option value="Registered Business - Composition">Registered Business - Composition (Business that is registered under composition scheme in gst)</option>
-                                    <option value="Unregistered Business">Unregistered Business (Business that has not been registered under gst)</option>
+                                    <option value="unregistered Business">Unregistered Business (Business that has not been registered under gst)</option>
                                     <option value="Overseas">Overseas (Import/Export of supply outside india)</option>
                                     <option value="Consumer">Consumer</option>
                                     <option value="Special Economic Zone (SEZ)">Special Economic Zone (SEZ) (Business that is located in a special economic zone of india or a SEZ developer)</option>
@@ -1923,7 +1923,7 @@ $(document).ready(function() {
                 $("#gst_trt_row").addClass('d-flex');
                 $('#email_inp').val(" " + data.email);
                 // $('#gstin_inp').val(" " + data.gstin);
-                if (data.gsttype === "Unregistered Business" || data.gsttype === "Consumer" || data.gsttype === "Overseas") {
+                if (data.gsttype === "unregistered Business" || data.gsttype === "Consumer" || data.gsttype === "Overseas") {
                     $("#gstin_row").addClass('d-none');
                     $("#gstin_row").removeClass('d-flex');
                 } else {
@@ -2098,7 +2098,7 @@ $(document).on("click", "#customerSave", function(){
                 $("#gst_trt_row1").addClass('d-flex');
                 $('#email_inp1').val(" " + data.email);
                 // $('#gstin_inp1').val(" " + data.gstin);
-                if (data.gsttype === "Unregistered Business" || data.gsttype === "Consumer" || data.gsttype === "Overseas") {
+                if (data.gsttype === "unregistered Business" || data.gsttype === "Consumer" || data.gsttype === "Overseas") {
                     $("#gstin_row1").addClass('d-none');
                     $("#gstin_row1").removeClass('d-flex');
                 } else {
@@ -2266,7 +2266,7 @@ $(document).ready(function() {
         }
 
         function hidinput1(divId, element) {
-            if (element.value == 'Unregistered Business' || element.value == 'Consumer' || element.value == 'Overseas') {
+            if (element.value == 'unregistered Business' || element.value == 'Consumer' || element.value == 'Overseas') {
                 document.getElementById(divId).style.display = 'none';
             } else {
                 document.getElementById(divId).style.display = 'block';
@@ -2498,6 +2498,31 @@ $(document).ready(function(){
     
  
  );
+ $('.item1').each(function(index, dropdown) {
+                    var row = $(dropdown).closest('.items-table-body');
+                    $.ajax({
+                        url: "{% url 'item_dropdown_rbill' %}",
+                        type: "GET",
+                        dataType: "json",
+                        data: row.find('select').serialize(),
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+
+                        success: function(data) {
+                            var dropdown = $('.item1');
+                            dropdown.empty();
+                            dropdown.append(`<option selected>Select Item</option>`);
+                            $.each(data, function(key, value) {
+                            
+                                dropdown.append($('<option></option>').attr('value', key).text(value).val(value));
+                            });
+
+                        },
+                        error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        }
+                    });
+                });
+    
 
             });
             
@@ -2569,7 +2594,7 @@ $(document).ready(function(){
                     console.log(response)
                     document.getElementById("modalItem").reset();
                     reloadItem();
-                    // reloadItem2()
+                    reloadItem2()
                 },
             });        
             });
@@ -2599,30 +2624,30 @@ $(document).ready(function(){
             }
             });
             }
-            // function reloadItem2() {
-            // $.ajax({
-            // url: "{% url 'item_dropdown_rbill' %}",
-            // type: "GET",
-            // dataType: "json",
-            // data: $(this).serialize(),
-            // csrfmiddlewaretoken: '{{ csrf_token }}',
+            function reloadItem2() {
+            $.ajax({
+            url: "{% url 'item_dropdown_rbill' %}",
+            type: "GET",
+            dataType: "json",
+            data: $(this).serialize(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
 
-            // success: function(data) {
-            //     var dropdown = $('#item');
-            //     console.log(data)
-            //     dropdown.empty();
-            //     dropdown.append(`<option selected>Select Item</option>`);
-            //     $.each(data, function(key, value) {
+            success: function(data) {
+                var dropdown = $('.item1');
+                console.log(data)
+                dropdown.empty();
+                dropdown.append(`<option selected>Select Item</option>`);
+                $.each(data, function(key, value) {
                 
-            //         dropdown.append($('<option></option>').attr('value', key).text(value).val(value));
-            //     });
+                    dropdown.append($('<option></option>').attr('value', key).text(value).val(value));
+                });
 
-            // },
-            // error: function(xhr, status, error) {
-            // console.error(xhr.responseText);
-            // }
-            // });
-            // }
+            },
+            error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            }
+            });
+            }
 
    // calculation---------------------------
 
@@ -2658,8 +2683,71 @@ $(document).ready(function(){
                 
 
             });
+            $(document).on('change', '.item1',function(){ 
+                
+                var n = $(this).attr("id").slice(4);
+                console.log('item changed')
+                console.log(n)
+                $.ajax({
+                url: "{% url 'itemdata_rbill' %}",
+                type : 'GET',
+                data:{
+                    id : $(this).val(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                
+                success: function(response) {
+                    data = response.hsn
+                    // data2 = response.qty
+                    data3 = response.price
+                    data4 = response.gst
+                    data5 = response.sgst
+                    console.log('HSN:', data);
+                    console.log('Price:', data3);
+                  
+                    
+                    document.getElementById('hsn'+n).value = data;
+                    // document.getElementById('qtyspan'+n).innerHTML = data2;
+                    document.getElementById('unit'+n).value = data3;
+
+                },
+                });
+                
+
+            });
            
-           
+           $(document).on('change', '.item',function(){ 
+                
+                var n = $(this).attr("id").slice(4);
+                console.log('item changed')
+                console.log(n)
+                $.ajax({
+                url: "{% url 'itemdata_rbill' %}",
+                type : 'GET',
+                data:{
+                    id : $(this).val(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                
+                success: function(response) {
+                    data = response.hsn
+                    // data2 = response.qty
+                    data3 = response.price
+                    data4 = response.gst
+                    data5 = response.sgst
+                    console.log('HSN:', data);
+                    console.log('Price:', data3);
+                  
+                    
+                    document.getElementById('hsn'+n).value = data;
+                    // document.getElementById('qtyspan'+n).innerHTML = data2;
+                    document.getElementById('unit'+n).value = data3;
+
+                },
+                });
+                
+
+            });
 
             $(document).on('click','.remove_row',function(){
                 var row_id = $(this).attr("id");
@@ -2691,6 +2779,9 @@ $(document).ready(function(){
 
                 clonedRow.find('.item').each(function() {
                     $(this).val(originalRow.find('.item').val());
+                });
+                clonedRow.find('.item1').each(function() {
+                    $(this).val(originalRow.find('.item1').val());
                 });
                 clonedRow.find('.intra_tax').each(function() {
                     $(this).val(originalRow.find('.intra_tax').val());

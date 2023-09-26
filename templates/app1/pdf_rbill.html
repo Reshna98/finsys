@@ -157,22 +157,28 @@
                                 <td style="color:black">{{rbill.discount}}</td>
                             </tr>
                             {% endif %} -->
-                            {% if rbill.igst != "0" %}
+                            {% if rbill.igst != 0 %}
                             <tr>
                                 <td style="color:black">IGST :</td>
                                 <td style="color:black">{{rbill.igst}}</td>
                             </tr>
                             {% endif %}
-                            {% if rbill.cgst != "0" %}
+                            {% if rbill.cgst != 0 %}
                             <tr>
                                 <td style="color:black">CGST :</td>
                                 <td style="color:black">{{rbill.cgst}}</td>
                             </tr>
                             {% endif %}
-                            {% if rbill.sgst != "0" %}
+                            {% if rbill.sgst != 0 %}
                             <tr>
                                 <td style="color:black">SGST :</td>
                                 <td style="color:black">{{rbill.sgst}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if rbill.shipping_charge != 0 %}
+                            <tr>
+                                <td style="color:black">Shipping_Charge :</td>
+                                <td style="color:black">{{rbill.shipping_charge}}</td>
                             </tr>
                             {% endif %}
                            
