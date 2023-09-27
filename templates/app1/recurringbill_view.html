@@ -118,6 +118,7 @@
             position: relative;
             box-shadow: var(--pageShadow);
         }
+       
         .bb {
             border-bottom: 3px solid var(--darkWhite);
         }
@@ -286,6 +287,7 @@
         width: 17cm;
         height: 23cm;
         overflow: hidden;
+       
     }
 
     .print-only {
@@ -301,6 +303,7 @@
         .page[size="A4"] {
         width: 21cm;
         height: 29.7cm;
+        
         }
         body * {
             visibility: hidden;
@@ -324,14 +327,23 @@
             page-break-before: always;
             page-break-inside: avoid;
             
+            
         }
        
         @page {
             size:100%;
             margin: 0;
             height: auto;
+           
         }
-       
+        td {
+                color: black !important; 
+
+            }
+    
+        .ribbon-open{
+            color: black !important; 
+        }
     }
 
     </style>
@@ -839,7 +851,8 @@
                                 <div class="row extra-info pt-3">
                                     <div class="col-7">
                                         <p>Deliver To Details: </p>
-                                        <p class="address ">{{customer_email}}<br>
+                                        <p class="address ">{{rbill.customer_name}}<br>
+                                            {{customer_email}}<br>
                                             {% if customer_gstin %}
                                               GSTIN:{{ customer_gstin }}
                                             {% endif %}</p>
@@ -923,6 +936,12 @@
                                         <tr>
                                             <td style="color:black">Shipping Charge :</td>
                                             <td style="color:black">{{rbill.shipping_charge}}</td>
+                                        </tr>
+                                        {% endif %}
+                                        {% if rbill.adjustment != 0 %}
+                                        <tr>
+                                            <td style="color:black">Adjustment :</td>
+                                            <td style="color:black">{{rbill.adjustment}}</td>
                                         </tr>
                                         {% endif %}
                                         <tfoot>

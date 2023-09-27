@@ -43149,7 +43149,7 @@ def pdfrbill_view(request,id):
     # Create a Django response object, and specify content_type as pdftemp_creditnote
     response = HttpResponse(content_type='application/pdf')
     #response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-    response['Content-Disposition'] =f'attachment; filename= {fname}.pdf'
+    response['Content-Disposition'] =f'attachment; filename=recurringbill-{fname}.pdf'
     # find the template and render it.
     template = get_template(template_path)
     html = template.render(context)
