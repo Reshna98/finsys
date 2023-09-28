@@ -261,7 +261,7 @@
                                 <div class="d-flex">
                                     <select class="custom-select" name="payment_method" id="method">
                                         <option value="cash">Cash</option>
-                                        <option value="15">Cheque</option>
+                                        <option value="cheque">Cheque</option>
                                         {% for b in bank %}
                                             <option value="{{ b.bankname }}">{{b.bankname }}</option>
                                         {% endfor %}
@@ -2738,12 +2738,20 @@ $(document).ready(function(){
             });
             $('#sub_total').val(total.toFixed(2));
             $('#tax_amount').val(taxamount.toFixed(2));
-            ship = parseFloat($("#ship").val());
+            ship = parseFloat($("#ship").val())|| 0;
+            // adj = parseFloat($("#adj").val());
+            // // console.log( ship);
+            // gtot = taxamount + total + ship + adj;
+            // $('#grandtotal').val(gtot.toFixed(2));
+            // // $('#baldue').val(gtot.toFixed(2));
+            // $('#balance').val(gtot.toFixed(2));
+            adj = parseFloat($("#adj").val())|| 0;
+            paidAmount = parseFloat($("#paid_amount").val()) || 0;
             // console.log( ship);
-            gtot = taxamount + total + ship;
+            gtot = taxamount + total + ship + adj;
             $('#grandtotal').val(gtot.toFixed(2));
-            // $('#baldue').val(gtot.toFixed(2));
-            $('#balance').val(gtot.toFixed(2));
+            bal= gtot - paidAmount;
+            $('#balance').val(bal.toFixed(2));
 
             test()
         }

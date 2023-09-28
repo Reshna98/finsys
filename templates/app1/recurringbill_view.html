@@ -298,7 +298,7 @@
      
     }
 
-    @media print {
+    /* @media print {
      
         .page[size="A4"] {
         width: 21cm;
@@ -317,9 +317,9 @@
             visibility: visible;
         }
 
-        .print-only {
+        .print-only { */
             /* position: absolute; */
-            position: fixed;
+            /* position: fixed;
             left: 0;
             top: 0;
             right: 0;
@@ -329,7 +329,14 @@
             
             
         }
-       
+        #whatToPrint  {
+        color: #000 !important;
+    }
+
+  
+    #whatToPrint hr {
+        border-color: #000 !important;
+    }
         @page {
             size:100%;
             margin: 0;
@@ -344,7 +351,68 @@
         .ribbon-open{
             color: black !important; 
         }
+    } */
+    @media print {
+    .page[size="A4"] {
+        width: 21cm;
+        height: 29.7cm;
     }
+    
+    body * {
+        visibility: hidden;
+    }
+
+    header {
+        display: none;
+    }
+
+    .print-only * {
+        visibility: visible;
+    }
+
+    .print-only {
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        height: auto;
+        page-break-before: always;
+        page-break-inside: avoid;
+    }
+
+    #whatToPrint {
+        color: #000 !important;
+    }
+
+    #whatToPrint .bb {
+        border-color: #000 !important;
+    }
+
+    @page {
+        size: 100%;
+        margin: 0;
+        height: auto;
+    }
+
+   
+    .print-only td {
+        color: black !important;
+    }
+
+    
+    .print-only .ribbon-open {
+        color: black !important;
+    }
+    table.table-bordered td {
+        color: black !important;
+    }
+
+    /* In your CSS stylesheet */
+.text-black {
+    color: #000 !important;
+}
+
+}
 
     </style>
 
@@ -364,7 +432,7 @@
                         <div class="collapse navbar-collapse" id="navbarScroll">
                             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                               <li class="nav-item active" >
-                                <a class="nav-link text-light btn" role="button" onclick="window.print()"><i class="fa fa-print">Print</i></a>
+                                <a class="nav-link text-light btn" role="button" onclick="printSection('whatToPrint')"><i class="fa fa-print">Print</i></a>
                               </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle text-light btn" href="#" id="navbarDropdown" role="button"
@@ -493,9 +561,17 @@
                                 <div class="col-md-3 mt-3 vl">
                                     <h6 class="mb-0">Payment Terms</h6>
                                 </div>
-                                <div class="col-md-3 mt-3">
+                                <!-- <div class="col-md-3 mt-3">
                                     <p class="mb-0">NET {{ rbill.payment_terms }}</p>
+                                </div> -->
+                                <div class="col-md-3 mt-3">
+                                    {% if rbill.payment_terms == "0" %}
+                                        <p class="mb-0">Due on Receipt</p>
+                                    {% else %}
+                                        <p class="mb-0">NET {{ rbill.payment_terms }}</p>
+                                    {% endif %}
                                 </div>
+                                
                             </div>
                             <div class="row mb-4 d-flex justify-content-between align-items-center">
                                 <div class="col-md-2 mt-3">
@@ -808,29 +884,29 @@
                 <div class="my-5 page" size="A4" >
                     <div class="p-5">
                         <div id="ember2512" class="tooltip-container ember-view ribbon text-ellipsis">
-                            <div class="ribbon-inner ribbon-open">{{rbill.status}}<!----></div></div>
-                        <section class="top-content bb d-flex justify-content-between">
+                            <div class="ribbon-inner ribbon-open text-black" style="color:black">{{rbill.status}}<!----></div></div>
+                        <section class="top-content bb d-flex justify-content-between" style="border-bottom: 3px solid rgb(207, 207, 207);">
                             <div class="logo">
                                 <!-- <img src="logo.png" alt="" class="img-fluid"> -->
                             </div>
                             <div class="top-left">
                                 <div class="graphic-path">
-                                    <p>Bill</p>
+                                    <p style="color:#000">Bill</p>
                                 </div>
                                 <div class="position-relative">
-                                    <p> Bill No : <span>{{rbill.billno }}</span></p>
+                                    <p style="color:#000"> Bill No : <span style="color:#000">{{rbill.billno }}</span></p>
                                 </div>
                             </div>
                         </section>
             
                         <section class="store-user mt-5">
                             <div class="col-12">
-                                <div class="row bb pb-3">
+                                <div class="row bb pb-3" style="border-bottom: 3px solid rgb(207, 207, 207);">
                                     <div class="col-7">
-                                        <p>FROM,</p>
+                                        <p style="color:#000">FROM,</p>
                                         <!-- <h5>{{rbill.vendor_name}}</h5> -->
-                                        <h5>{{cmp1.cname }}</h5>
-                                        <p class="address "> {{cmp1.caddress}}<br>
+                                        <h5 style="color: #22b8d1;">{{cmp1.cname }}</h5>
+                                        <p class="address" style="color:#000"> {{cmp1.caddress}}<br>
                                             {{cmp1.city}},
                                             {{cmp1.state}}<br>
                                             {{cmp1.pincode}}<br>
@@ -840,9 +916,9 @@
                                          
                                     </div>
                                     <div class="col-5">
-                                        <p>TO,</p>
-                                        <h5>{{rbill.vendor_name}}</h5>
-                                        <p class="address ">{{vendor_email}}<br>
+                                        <p style="color:#000">TO,</p>
+                                        <h5  style="color: #22b8d1;">{{rbill.vendor_name}}</h5>
+                                        <p class="address " style="color:#000">{{vendor_email}}<br>
                                             {% if vendor_gstin %}
                                               GSTIN:{{ vendor_gstin }}
                                             {% endif %}
@@ -850,16 +926,16 @@
                                 </div>
                                 <div class="row extra-info pt-3">
                                     <div class="col-7">
-                                        <p>Deliver To Details: </p>
-                                        <p class="address ">{{rbill.customer_name}}<br>
+                                        <p style="color:#000">Deliver To Details: </p>
+                                        <p class="address " style="color:#000">{{rbill.customer_name}}<br>
                                             {{customer_email}}<br>
                                             {% if customer_gstin %}
                                               GSTIN:{{ customer_gstin }}
                                             {% endif %}</p>
                                     </div>
                                     <div class="col-5">
-                                        <p>Start Date : <span>{{ rbill.start_date | date:'d-m-Y' }}</span></p>
-                                        <p>End Date : <span> {{ rbill.end_date}}</span></p>
+                                        <p style="color:#000">Start Date : <span>{{ rbill.start_date | date:'d-m-Y' }}</span></p>
+                                        <p style="color:#000">End Date : <span> {{ rbill.end_date}}</span></p>
                                        
                                     </div>
                                 </div>
@@ -870,13 +946,13 @@
                             <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
-                                        <td>ITEMS</td>
-                                        <td>HSN NUMBER</td>
-                                        <td>QUANTITY</td>
-                                        <td>PRICE</td>
-                                        <td>TAX</td>
-                                        <td>DISCOUNT</td>
-                                        <td>TOTAL</td>
+                                        <td class="text-center text-black" style="color:black">ITEMS</td>
+                                        <td class="text-center text-black" style="color:black">HSN NUMBER</td>
+                                        <td class="text-center text-black" style="color:black">QUANTITY</td>
+                                        <td class="text-center text-black" style="color:black">PRICE</td>
+                                        <td class="text-center text-black" style="color:black">TAX</td>
+                                        <td class="text-center text-black" style="color:black">DISCOUNT</td>
+                                        <td class="text-center text-black" style="color:black">TOTAL</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1013,6 +1089,23 @@
                 }
             });
         </script>
+    
 
+   
+    <script>
+    function printSection(sectionId) {
+        var printContents = document.getElementById(sectionId).innerHTML;
+        var originalContents = document.body.innerHTML;
+    
+        document.body.innerHTML = printContents;
+    
+        window.print();
+    
+        document.body.innerHTML = originalContents;
+    }
+    </script>
+
+
+   
     {% endif %}
     {% endblock %}
